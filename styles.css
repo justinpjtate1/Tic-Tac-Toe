@@ -1,0 +1,39 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+}
+
+#scoreboard>p {
+    display: inline-block;
+    font-size: 48px;
+}
+
+main {
+    margin: auto;
+    max-width: 50%;
+    max-height: 50%;
+    flex-grow: 1;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+    border-style: solid;
+}
+
+.grid-item {
+    border-style: solid;
+    font-size: 96px;
+}
+
+.grid-text {
+    display: inline-block;
+    margin: auto;
+}
+
+#current-go {
+    text-decoration: underline;
+}

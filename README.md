@@ -26,3 +26,27 @@ As a user, I should not be able to continue playing once I win, lose, or tie
 
 As a user, I should be able to play the game again without refreshing the page
 - There should be a restart button that's visible that empties the board and starts a new game with the default being a cross
+
+## HTML
+
+- Header section with `<h1>` header tag
+- Section for the X and O
+- Separate tags for X and O. Possibly `<p>`?
+- Use an ID on the X and O tags to suggest which go
+- main section for the grid.
+- 9 elements for the grid
+- Section for the button to restart game
+- footer section saying by me
+
+## CSS
+
+- Make the body stretch to the whole page
+- Flexbox the body and have the stretchable element as the main section
+- make the grid using grid-template for rows and columns
+- Keep the grid in the center of the page
+- Center the X and O tags
+- style the id that suggests which turn it is with an underline for clarity
+
+## JS
+
+- 

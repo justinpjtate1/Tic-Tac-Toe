@@ -1,7 +1,7 @@
 const gridButtons = document.querySelectorAll('.grid-item');
+const turns = document.querySelectorAll('#scoreboard>p');
 
 const changeTurn = () => {
-    const turns = document.querySelectorAll('#scoreboard>p');
     turns.forEach(turn => {
         if(turn.id === 'current-go') {
             turn.id = ''
@@ -21,3 +21,16 @@ const gridEventListener = () => {
 }
 
 gridEventListener();
+
+const restartGameButton = document.querySelector('#restart');
+const restartGame = () => {
+    restartGameButton.addEventListener('click', function() {
+        gridButtons.forEach(value => {
+            value.innerText = '';
+        });
+        turns[0].id = 'current-go';
+        turns[1].id = '';
+    });
+};
+
+restartGame();

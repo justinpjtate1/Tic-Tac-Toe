@@ -49,4 +49,15 @@ As a user, I should be able to play the game again without refreshing the page
 
 ## JS
 
-- 
+- Get all of the grid items into an array
+- use the forEach method to add event listeners
+- in the click event listener, create an if with the innerHTML
+- if innerHTML = "" then replace innerHTML with the inner text of the ID currentGo (another array?)
+- Also change the ID to the other element
+
+- We also need to determine when to create an alert when the game is over. Possibly this is a do..while?
+- Create a variable with all winning conditons and make this the stopping point - maybe an array?
+- Once the do-while condition is satisfied a pop-up should appear
+- The pop-up should have a button that allows you to restart game
+- When button is pressed, the pop-up should disappear
+- Similar functionality with a click event listener for the restart game button

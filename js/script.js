@@ -14,8 +14,10 @@ const changeTurn = () => {
 const gridEventListener = () => {
     gridButtons.forEach(value => {
         value.addEventListener('click', function() {
-            value.innerText = document.querySelector('#current-go').innerText;
-            changeTurn();
+            if(value.innerText === '') {
+                value.innerText = document.querySelector('#current-go').innerText;
+                changeTurn();
+            }
         })
     })
 }

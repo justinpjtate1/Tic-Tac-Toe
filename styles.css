@@ -27,6 +27,7 @@ main {
 .grid-item {
     border-style: solid;
     font-size: 96px;
+    line-height: 100px;
 }
 
 .grid-text {

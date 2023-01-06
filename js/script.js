@@ -7,7 +7,26 @@ const turns = document.querySelectorAll('#scoreboard>p');
 let pointsCross = 0;
 let pointsNought = 0;
 
+let crossElement = document.createElement('div');
+crossElement.innerText = pointsCross;
+turns[0].appendChild(crossElement);
 
+let noughtElement = document.createElement('div');
+noughtElement.innerText = pointsNought;
+turns[1].appendChild(noughtElement);
+
+// const createElement = (element, innerText, id, class) => {
+//     const newElement = document.createElement(`${element}`);
+//     newElement.innerText = innerText;
+//     newElement.id = id;
+//     newElement.className = class;
+
+// }
+
+// turns.forEach((value, index) => {
+//     createElement(div, scores.index)
+    
+// })
 
 const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
    
@@ -47,9 +66,11 @@ const gameOutcome = () => {
     if (winnerCross === true) {
         document.querySelector('#result').innerText = `winner X`;
         console.log(pointsCross += 1);
+        crossElement.innerText = pointsCross;
     } else if (winnerNought === true) {
         document.querySelector('#result').innerText = `winner O`;
         console.log(pointsNought += 1);
+        noughtElement.innerText = pointsNought;
     } else if (boardNotFull === false) {
         document.querySelector('#result').innerText = 'draw'
     }
@@ -66,12 +87,14 @@ const changeTurn = (nextGo) => {
     })
 }
 
+
+
 // This function adds an event listener to each tile
 const gridEventListener = () => {
     gridButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
             if(button.innerText === '' && isGameEnded() !== true) {
-                button.innerText = document.querySelector('#current-go').innerText;
+                button.innerText = document.querySelector('#current-go').innerText.charAt(0);
                 gridButtonsArr[index] = button.innerText;
                 if(isGameEnded() === true) {
                     gameOutcome();

@@ -4,54 +4,63 @@ const gridButtons = document.querySelectorAll('.grid-item');
 // Gathers the X and O elements on page
 const turns = document.querySelectorAll('#scoreboard>p');
 
-// This function checks if either one of the winning combinations or a tie has been hit and sends a message accordingly
+let pointsCross = 0;
+let pointsNought = 0;
 
-const endOfGame = () => {
-    turns.forEach(turn => {
-        if(turn.id === 'current-go') {
-            turn.id = ''
-        }
-    })
-}
-const gameOutcome = () => {
-    
-    //Makes an array out of the values inside each grid cell
-    const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
 
-    // All possible winning combinations in an array
-    const winningCombinations = [
-    [gridButtonsArr[0], gridButtonsArr[1], gridButtonsArr[2]],
-    [gridButtonsArr[3], gridButtonsArr[4], gridButtonsArr[5]],
-    [gridButtonsArr[6], gridButtonsArr[7], gridButtonsArr[8]],
-    [gridButtonsArr[0], gridButtonsArr[3], gridButtonsArr[6]],
-    [gridButtonsArr[1], gridButtonsArr[4], gridButtonsArr[7]],
-    [gridButtonsArr[2], gridButtonsArr[5], gridButtonsArr[8]],
-    [gridButtonsArr[0], gridButtonsArr[4], gridButtonsArr[8]],
-    [gridButtonsArr[2], gridButtonsArr[4], gridButtonsArr[6]]
+
+const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
+   
+const isGameEnded = () => {
+
+    winningCombinations = [
+        [gridButtonsArr[0], gridButtonsArr[1], gridButtonsArr[2]],
+        [gridButtonsArr[0], gridButtonsArr[1], gridButtonsArr[2]],
+        [gridButtonsArr[3], gridButtonsArr[4], gridButtonsArr[5]],
+        [gridButtonsArr[6], gridButtonsArr[7], gridButtonsArr[8]],
+        [gridButtonsArr[0], gridButtonsArr[3], gridButtonsArr[6]],
+        [gridButtonsArr[1], gridButtonsArr[4], gridButtonsArr[7]],
+        [gridButtonsArr[2], gridButtonsArr[5], gridButtonsArr[8]],
+        [gridButtonsArr[0], gridButtonsArr[4], gridButtonsArr[8]],
+        [gridButtonsArr[2], gridButtonsArr[4], gridButtonsArr[6]]
     ];
 
-    // The winner variable checks if one of the winning combinations has been hit by either the X or O
     const winner = winningCombinations.some(value => value.every(v => v !== '' && v === value[0]));
+    const boardNotFull = gridButtonsArr.some(value => value === '');
+
+    if(winner === true) {
+        return true;
+    } else if (boardNotFull === false) {
+        return true;
+    }
+}
+
+const gameOutcome = () => {
+    // The winner variable checks if one of the winning combinations has been hit by either the X or O
+    const winnerCross = winningCombinations.some(value => value.every(v => v === 'X'));
+    const winnerNought = winningCombinations.some(value => value.every(v => v === 'O'));
 
     // The boardNotFull variable checks if there is still space on the board
     const boardNotFull = gridButtonsArr.some(value => value === '')
 
     // This if statement prints an outcome to the page when there is one
-    if (winner === true) {
-        document.querySelector('#result').innerText = 'winner';
-        return true;
+    if (winnerCross === true) {
+        document.querySelector('#result').innerText = `winner X`;
+        console.log(pointsCross += 1);
+    } else if (winnerNought === true) {
+        document.querySelector('#result').innerText = `winner O`;
+        console.log(pointsNought += 1);
     } else if (boardNotFull === false) {
         document.querySelector('#result').innerText = 'draw'
-        return true;
     }
 }
 
 // This function displays the change in turn on the page;
-const changeTurn = () => {
+const changeTurn = (nextGo) => {
     turns.forEach(turn => {
         if(turn.id === 'current-go') {
             turn.id = ''
-        } else if (turn.id === '') {
+        } else if (turn.id === '' && nextGo === true) {
             turn.id = 'current-go'
         }
     })
@@ -59,15 +68,16 @@ const changeTurn = () => {
 
 // This function adds an event listener to each tile
 const gridEventListener = () => {
-    gridButtons.forEach(button => {
+    gridButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
-            if(button.innerText === '' && gameOutcome() !== true) {
+            if(button.innerText === '' && isGameEnded() !== true) {
                 button.innerText = document.querySelector('#current-go').innerText;
-                if(gameOutcome() === true) {
+                gridButtonsArr[index] = button.innerText;
+                if(isGameEnded() === true) {
                     gameOutcome();
-                    endOfGame();
+                    changeTurn(false);
                 } else {
-                    changeTurn();
+                    changeTurn(true);
                 }
             }
         })
@@ -84,6 +94,7 @@ const restartGame = () => {
         gridButtons.forEach(value => {
             value.innerText = '';
         });
+        gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
         turns[0].id = 'current-go';
         turns[1].id = '';
         document.querySelector('#result').innerText = '';

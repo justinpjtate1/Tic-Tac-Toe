@@ -20,14 +20,18 @@ createElement('div', 'scores', 'scoreNought', pointsNought, document.querySelect
 
 const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
 
-function overlayOn(outcome) {
+const clickAudio = new Audio('click_sound.mp3');
+const endGameAudio = new Audio('end_game_sound.mp3');
+const restartAudio = new Audio('restart_game.mp3')
+
+const overlayOn = (outcome) => {
     const overlay = document.querySelector("#overlay");
     overlay.style.display = "block";
     const overlayText = document.querySelector("#overlay>div>p");
     overlayText.innerText = `End of round: \n${outcome}`;
   }
   
-function overlayOff() {
+const overlayOff = () => {
     document.querySelector("#overlay").style.display = "none";
   }
 
@@ -103,10 +107,12 @@ const gridEventListener = () => {
             if(button.innerText === '' && isGameEnded() !== true) {
                 button.innerText = document.querySelector('#current-go').innerText;
                 gridButtonsArr[index] = button.innerText;
+                clickAudio.play();
                 button.id = 'clicked';
                 if(isGameEnded() === true) {
                     gameOutcome();
                     changeTurn(false);
+                    endGameAudio.play();
                 } else {
                     changeTurn(true);
                 }
@@ -131,6 +137,7 @@ const restartGame = (button) => {
         gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
         turns[0].id = 'current-go';
         turns[1].id = '';
+        restartAudio.play();
     })
 }
 

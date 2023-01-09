@@ -23,8 +23,8 @@ const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => valu
 function overlayOn(outcome) {
     const overlay = document.querySelector("#overlay");
     overlay.style.display = "block";
-    const overlayText = document.querySelector("#overlay>div>p")
-    overlayText.innerText = `End of round \n ${outcome}`
+    const overlayText = document.querySelector("#overlay>div>p");
+    overlayText.innerText = `End of round \n ${outcome}`;
   }
   
 function overlayOff() {

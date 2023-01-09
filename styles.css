@@ -111,6 +111,15 @@ footer {
     color: white;
     transform: translate(-50%,-50%);
     -ms-transform: translate(-50%,-50%);
+    background-color: black;
+    border-radius: 50%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  #text>p {
+    margin: 0;
   }
 
 /* Start media query at 625px or 745px with the chalkboard */

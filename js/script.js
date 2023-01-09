@@ -126,11 +126,11 @@ const restartGame = (button) => {
         overlayOff();
         gridButtons.forEach((value, index) => {
             value.innerText = '';
-            value.id = '';
+            value.id = index;
         });
         gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
         turns[0].id = 'current-go';
-        turns[1].id = index;
+        turns[1].id = '';
     })
 }
 

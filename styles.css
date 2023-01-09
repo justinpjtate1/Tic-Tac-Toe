@@ -1,40 +1,116 @@
+@font-face {
+    font-family: 'TicTacToeFont';
+    src:  url('Desktop-GoodDog/Fonts/gooddog.otf');
+  }
+
+@font-face {
+    font-family: 'ChalkboardFont';
+    src: url('CallieChalkFont-Regular.otf');
+}
+
 body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     text-align: center;
+    font-family: 'TicTacToeFont', Fallback, sans-serif;
+    background-image: url('white-brick-wall-textured-background.webp');
+    background-size: cover;
 }
 
-#scoreboard>p {
+#scoreboard {
+    background-color: black;
+    width: 360px;
+    color: white;
+    margin: 20px auto;
+}
+
+#counters {
+    margin: 0px;
+}
+
+.counter,  .scores {
     display: inline-block;
     font-size: 48px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
 }
 
 main {
-    margin: auto;
-    max-width: 50%;
-    max-height: 50%;
-    flex-grow: 1;
+    margin: 0 auto;
+    height: 363px;
+    width: 735.075px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('Chalkboard2.jpeg');
+    background-size: cover;
 }
 .grid-container {
     display: grid;
     grid-template-columns: 100px 100px 100px;
     grid-template-rows: 100px 100px 100px;
-    border-style: solid;
+    margin: 30px 0px;
 }
 
 .grid-item {
     border-style: solid;
-    font-size: 96px;
+    font-size: 48px;
     line-height: 100px;
-}
-
-.grid-text {
-    display: inline-block;
-    margin: auto;
+    color: #E8E8E8;
+    font-family: 'ChalkboardFont', Fallback, sans-serif;
+    border: solid 4px white;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
 }
 
 #current-go {
-    text-decoration: underline;
+    background-color: red;
+    border-radius: 100%;
 }
+
+.scores {
+    background: lightblue;
+    background: linear-gradient(bottom, rgba(7, 161, 179), rgba(30, 139, 195,1));
+    background: -webkit-linear-gradient(bottom, rgba(7, 161, 179), rgba(30, 139, 195,1));
+    background: -moz-linear-gradient(bottom, rgba(1, 1, 122,1), rgba(30, 139, 195,1));
+    color: white;
+}
+
+.restart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+footer {
+    height: 100px;
+}
+
+#overlay {
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100%; /* Full width (cover the whole page) */
+    height: 100%; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+#text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 50px;
+    color: white;
+    transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+  }
+
+/* Start media query at 625px or 745px with the chalkboard */

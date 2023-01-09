@@ -96,8 +96,6 @@ const changeTurn = (nextGo) => {
     })
 }
 
-
-
 // This function adds an event listener to each tile
 const gridEventListener = () => {
     gridButtons.forEach((button, index) => {
@@ -105,6 +103,7 @@ const gridEventListener = () => {
             if(button.innerText === '' && isGameEnded() !== true) {
                 button.innerText = document.querySelector('#current-go').innerText;
                 gridButtonsArr[index] = button.innerText;
+                button.id = 'clicked';
                 if(isGameEnded() === true) {
                     gameOutcome();
                     changeTurn(false);
@@ -125,12 +124,13 @@ const restartGameButtons = document.querySelectorAll('#restart');
 const restartGame = (button) => {
     button.addEventListener('click', function() {
         overlayOff();
-        gridButtons.forEach(value => {
+        gridButtons.forEach((value, index) => {
             value.innerText = '';
+            value.id = '';
         });
         gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
         turns[0].id = 'current-go';
-        turns[1].id = '';
+        turns[1].id = index;
     })
 }
 

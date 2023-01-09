@@ -144,7 +144,7 @@ button {
 }
 
 #restart:hover {
-    background-color: green;
+    background-color: rgb(16, 222, 16);
 }
 
 #reset-game:hover {
@@ -168,6 +168,27 @@ button {
         font-size: 24px;
         line-height: 70px;
     }
+}
+
+@keyframes glowing {
+    0% {
+        background-color: rgb(115, 196, 100);
+        box-shadow: 0 0 3px rgb(115, 196, 100);;
+    }
+
+    50% {
+        background-color: rgb(115, 196, 100);
+        box-shadow: 0 0 10px rgb(115, 196, 100);;
+    }
+
+    100% {
+        background-color: rgb(115, 196, 100);
+        box-shadow: 0 0 3px rgb(115, 196, 100);;
+    }
+}
+
+#overlay>div>#restart {
+    animation: glowing 1000ms infinite;
 }
 
 @media screen and (max-width: 745px) {

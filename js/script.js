@@ -150,10 +150,10 @@ const gameOutcome = () => {
     // This if statement prints an outcome to the page when there is one. Use this.number maybe to cut down the if?
     if (player1Win === true) {
         player1.addToScore(1);
-        overlayOn('Player 1 Wins');
+        overlayOn(`${player1.name} (${player1.symbol}) wins`);
     } else if (player2Win === true) {
         player2.addToScore(1);
-        overlayOn('Player 2 Wins');
+        overlayOn(`${player2.name} (${player2.symbol}) wins`);
     } else if (boardNotFull === false) {
         overlayOn('Draw');
     }

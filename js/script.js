@@ -20,9 +20,23 @@ createElement('div', 'scores', 'scoreNought', pointsNought, document.querySelect
 
 const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
 
-const clickAudio = new Audio('click_sound.mp3');
-const endGameAudio = new Audio('end_game_sound.mp3');
-const restartAudio = new Audio('restart_game.mp3')
+const volumeButton = document.querySelector('.sound-button');
+
+volumeButton.addEventListener('click', function() {
+    if(volumeButton.id === 'sound-button-on') {
+        volumeButton.id = 'sound-button-off';
+        volumeButton.src = 'sound-off.png';
+    } else if(volumeButton.id === 'sound-button-off') {
+        volumeButton.id = 'sound-button-on';
+        volumeButton.src = 'sound-on.png';
+    }
+})
+
+const audio = (filename) => {
+    if (volumeButton.id === 'sound-button-on') {
+        new Audio(filename).play();
+    } 
+} 
 
 const overlayOn = (outcome) => {
     const overlay = document.querySelector("#overlay");
@@ -107,12 +121,12 @@ const gridEventListener = () => {
             if(button.innerText === '' && isGameEnded() !== true) {
                 button.innerText = document.querySelector('#current-go').innerText;
                 gridButtonsArr[index] = button.innerText;
-                clickAudio.play();
+                audio('click_sound.mp3');
                 button.id = 'clicked';
                 if(isGameEnded() === true) {
                     gameOutcome();
                     changeTurn(false);
-                    endGameAudio.play();
+                    audio('end_game_sound.mp3');
                 } else {
                     changeTurn(true);
                 }
@@ -137,7 +151,7 @@ const restartGame = (button) => {
         gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
         turns[0].id = 'current-go';
         turns[1].id = '';
-        restartAudio.play();
+        audio('restart_game.mp3');
     })
 }
 

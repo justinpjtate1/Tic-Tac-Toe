@@ -1,40 +1,70 @@
 //Takes the 9 grid buttons from the page
+class Player {
+    constructor(number, symbol) {
+        this.number = number;
+        this.name = `Player ${this.number}`;
+        this.symbol = symbol;
+        this.score;
+        this.scoreboard_name = document.querySelector(`#player-name-${this.number}`);
+        this.scoreboard_symbol = document.querySelector(`[data-number*="counter-${this.number}"]`);
+        this.scoreboard_score = document.querySelector(`#score-player-${this.number}`);
+        this.submit_name_button = document.querySelector(`#submit-name-${this.number}`);
+        this.input_name = document.querySelector(`#name-input-${this.number}`);
+        this.submit_symbol_button = document.querySelector(`#submit-symbol-${this.number}`);
+        this.input_symbol = document.querySelector(`#symbol-input-${this.number}`);
+    }
+
+    currentScore(value) {
+        this.score = +(value);
+        this.scoreboard_score.innerText = this.score;
+    }
+
+    addDetailsToScoreboard() {
+        this.scoreboard_name.innerText = this.name;
+        this.scoreboard_symbol.innerText = this.symbol;
+        if(localStorage.getItem(`player ${this.number}`) !== null) {
+            this.currentScore(localStorage.getItem(`player ${this.number}`))
+        } else {
+            this.currentScore(0)
+        }   
+    }
+
+    changeName() {
+        this.submit_name_button.addEventListener('click', () => {
+            this.name = this.input_name.value;
+            this.scoreboard_name.innerText = this.name;
+        })
+    }
+
+    changeSymbol() {
+        this.submit_symbol_button.addEventListener('click', () => {
+            this.symbol = this.input_symbol.value;
+            this.scoreboard_symbol.innerText = this.symbol;
+        })
+    }
+
+    addToScore(value) {
+        this.score += value;
+        this.scoreboard_score.innerText = this.score;
+        (localStorage.setItem(`player ${this.number}`, this.score))
+    }
+}
+
+const player1 = new Player(1, 'X');
+player1.addDetailsToScoreboard();
+
+const player2 = new Player(2, 'O');
+player2.addDetailsToScoreboard();
+
+player1.changeName();
+player2.changeName();
+player1.changeSymbol();
+player2.changeSymbol();
+
 const gridButtons = document.querySelectorAll('.grid-item');
 
 // Gathers the X and O elements on page
 const turns = document.querySelectorAll('.counter');
-
-let pointsCross;
-const crossScore = () => {
-    if(localStorage.getItem('cross') !== null) {
-        pointsCross = +(localStorage.getItem('cross'))
-    } else {
-        pointsCross = 0;
-    };
-} 
-
-let pointsNought;
-const NoughtScore = () => {
-    if(localStorage.getItem('nought') !== null) {
-        pointsNought = +(localStorage.getItem('nought'))
-    } else {
-        pointsNought = 0;
-    };
-}
-
-crossScore();
-NoughtScore();
-
-const createElement = (elementType, className, id, innerText, parentDiv) => {
-    const newElement = document.createElement(elementType);
-    newElement.className = className;
-    newElement.id = id;
-    newElement.innerText = innerText;
-    parentDiv.appendChild(newElement);
-}
-
-createElement('div', 'scores', 'scoreCross', pointsCross, document.querySelector('#scores'));
-createElement('div', 'scores', 'scoreNought', pointsNought, document.querySelector('#scores'));
 
 const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
 
@@ -71,7 +101,7 @@ const audio = (filename) => {
     if (volumeToggle() === true) {
         new Audio(filename).play();
     } 
-} 
+}
 
 const overlayOn = (outcome) => {
     const overlay = document.querySelector("#overlay");
@@ -84,16 +114,6 @@ const overlayOff = () => {
     document.querySelector("#overlay").style.display = "none";
   }
 
-const changeCrossScore = (value) => {
-    pointsCross = value;
-    document.querySelector('#scoreCross').innerText = pointsCross;
-}
-
-const changeNoughtScore = (value) => {
-    pointsNought = value;
-    document.querySelector('#scoreNought').innerText = pointsNought;
-}
-   
 const isGameEnded = () => {
 
     winningCombinations = [
@@ -120,21 +140,20 @@ const isGameEnded = () => {
 
 const gameOutcome = () => {
     // The winner variable checks if one of the winning combinations has been hit by either the X or O
-    const winnerCross = winningCombinations.some(value => value.every(v => v === 'X'));
-    const winnerNought = winningCombinations.some(value => value.every(v => v === 'O'));
+
+    const player1Win = winningCombinations.some(value => value.every(v => v === player1.symbol));
+    const player2Win = winningCombinations.some(value => value.every(v => v === player2.symbol));
 
     // The boardNotFull variable checks if there is still space on the board
     const boardNotFull = gridButtonsArr.some(value => value === '')
 
-    // This if statement prints an outcome to the page when there is one
-    if (winnerCross === true) {
-        changeCrossScore(pointsCross + 1);
-        overlayOn('Cross Wins');
-        localStorage.setItem('cross', pointsCross);
-    } else if (winnerNought === true) {
-        changeNoughtScore(pointsNought + 1);
-        overlayOn('Nought Wins');
-        localStorage.setItem('nought', pointsNought);
+    // This if statement prints an outcome to the page when there is one. Use this.number maybe to cut down the if?
+    if (player1Win === true) {
+        player1.addToScore(1);
+        overlayOn('Player 1 Wins');
+    } else if (player2Win === true) {
+        player2.addToScore(1);
+        overlayOn('Player 2 Wins');
     } else if (boardNotFull === false) {
         overlayOn('Draw');
     }
@@ -197,9 +216,10 @@ restartGameButtons.forEach(button => restartGame(button));
 const resetGame = (button) => {
     restartGame(button);
     button.addEventListener('click', function() {
-        changeCrossScore(0);
-        changeNoughtScore(0);
-        localStorage.clear();
+        player1.currentScore(0);
+        player2.currentScore(0);
+        localStorage.removeItem('player 1');
+        localStorage.removeItem('player 2');
     })
 };
 

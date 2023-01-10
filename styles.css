@@ -18,11 +18,17 @@ body {
     background-size: cover;
 }
 
+#game-information {
+    display: grid;
+    grid-template-columns: 0.5fr 300px 0.5fr;
+    grid-template-rows: 1fr;
+    margin-bottom: 20px;
+}
+
 #scoreboard {
     background-color: black;
-    width: 360px;
     color: white;
-    margin: 20px auto;
+    margin: 0 auto;
     border-radius: 12px;
 }
 
@@ -34,8 +40,23 @@ body {
     margin-bottom: 5px;
     margin-top: 5px;
     padding: 10px;
-    border-radius: 12px;
     width: 30px;
+}
+
+#counters, #scores {
+    padding: 0 30px;
+}
+
+.profile {
+    border: solid;
+}
+
+.player-name {
+    display: inline-block;
+    margin-left: 15px;
+    margin-right: 15px;
+    /* padding: 5px; */
+    /* width: 45px; */
 }
 
 main {

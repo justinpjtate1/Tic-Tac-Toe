@@ -4,8 +4,26 @@ const gridButtons = document.querySelectorAll('.grid-item');
 // Gathers the X and O elements on page
 const turns = document.querySelectorAll('.counter');
 
-let pointsCross = 0;
-let pointsNought = 0;
+let pointsCross;
+const crossScore = () => {
+    if(localStorage.getItem('cross') !== null) {
+        pointsCross = +(localStorage.getItem('cross'))
+    } else {
+        pointsCross = 0;
+    };
+} 
+
+let pointsNought;
+const NoughtScore = () => {
+    if(localStorage.getItem('nought') !== null) {
+        pointsNought = +(localStorage.getItem('nought'))
+    } else {
+        pointsNought = 0;
+    };
+}
+
+crossScore();
+NoughtScore();
 
 const createElement = (elementType, className, id, innerText, parentDiv) => {
     const newElement = document.createElement(elementType);
@@ -22,18 +40,35 @@ const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => valu
 
 const volumeButton = document.querySelector('.sound-button');
 
+const volume = (value) => {
+    volumeButton.id = 'sound-button-' + value;
+    volumeButton.src = 'sound-' + value + '.png';
+}
+
+const volumeToggle = () => {
+    if(localStorage.getItem('volume') === 'sound-button-off') {
+        volume('off');
+        return false
+    } else {
+        volume('on');
+        return true
+    }
+}
+
+volumeToggle();
+
 volumeButton.addEventListener('click', function() {
-    if(volumeButton.id === 'sound-button-on') {
-        volumeButton.id = 'sound-button-off';
-        volumeButton.src = 'sound-off.png';
-    } else if(volumeButton.id === 'sound-button-off') {
-        volumeButton.id = 'sound-button-on';
-        volumeButton.src = 'sound-on.png';
+    if(volumeToggle() === true) {
+        volume('off');
+        localStorage.setItem('volume', 'sound-button-off');
+    } else {
+        volume('on');
+        localStorage.setItem('volume', 'sound-button-on');
     }
 })
 
 const audio = (filename) => {
-    if (volumeButton.id === 'sound-button-on') {
+    if (volumeToggle() === true) {
         new Audio(filename).play();
     } 
 } 
@@ -95,9 +130,11 @@ const gameOutcome = () => {
     if (winnerCross === true) {
         changeCrossScore(pointsCross + 1);
         overlayOn('Cross Wins');
+        localStorage.setItem('cross', pointsCross);
     } else if (winnerNought === true) {
         changeNoughtScore(pointsNought + 1);
         overlayOn('Nought Wins');
+        localStorage.setItem('nought', pointsNought);
     } else if (boardNotFull === false) {
         overlayOn('Draw');
     }
@@ -162,6 +199,7 @@ const resetGame = (button) => {
     button.addEventListener('click', function() {
         changeCrossScore(0);
         changeNoughtScore(0);
+        localStorage.clear();
     })
 };
 

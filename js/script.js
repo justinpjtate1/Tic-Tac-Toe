@@ -1,5 +1,5 @@
 const gridButtons = document.querySelectorAll('.grid-item');
-const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
+const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerHTML);
 
 const newGame = () => {
     if(gridButtonsArr.every(value => value === '') === true) {
@@ -21,23 +21,25 @@ class Player {
         this.input_name = document.querySelector(`#name-input-${this.number}`);
         this.submit_symbol_button = document.querySelector(`#submit-symbol-${this.number}`);
         this.input_symbol = document.querySelector(`#symbol-input-${this.number}`);
+        this.upload_symbol_button = document.querySelector(`#submit-symbol-file-${this.number}`)
+        this.upload_symbol = document.querySelector(`#fileupload-${this.number}`)
     }
 
     currentScore(value) {
         this.score = +(value);
-        this.scoreboard_score.innerText = this.score;
+        this.scoreboard_score.innerHTML = this.score;
     }
 
     addDetailsToScoreboard() {
         if(localStorage.getItem(`player ${this.number} name`) !== null) {
             this.name = localStorage.getItem(`player ${this.number} name`);
         }
-        this.scoreboard_name.innerText = this.name;
+        this.scoreboard_name.innerHTML = this.name;
         if(localStorage.getItem(`player ${this.number} symbol`) !== null) {
             this.custom_symbol = localStorage.getItem(`player ${this.number} symbol`);
-            this.scoreboard_symbol.innerText = this.custom_symbol;
+            this.scoreboard_symbol.innerHTML = this.custom_symbol;
         } else {
-            this.scoreboard_symbol.innerText = this.default_symbol;
+            this.scoreboard_symbol.innerHTML = this.default_symbol;
         }
         if(localStorage.getItem(`player ${this.number} score`) !== null) {
             this.currentScore(localStorage.getItem(`player ${this.number} score`))
@@ -48,41 +50,63 @@ class Player {
 
     changeName() {
         this.submit_name_button.addEventListener('click', () => {
-            this.name = this.input_name.value;
-            this.scoreboard_name.innerText = this.name;
-            localStorage.setItem(`player ${this.number} name`, this.name);
-            this.input_name.value = '';
+            if(this.input_name.value !== '') {
+                this.name = this.input_name.value;
+                this.scoreboard_name.innerHTML = this.name;
+                localStorage.setItem(`player ${this.number} name`, this.name);
+                this.input_name.value = '';
+            } else {
+                alert("Please ensure the name field isn't blank");
+            }
         })
     }
 
     changeSymbol() {
         this.submit_symbol_button.addEventListener('click', () => {
             if(newGame() === true) {
-                this.custom_symbol = this.input_symbol.value;
-                this.scoreboard_symbol.innerText = this.custom_symbol;
-                localStorage.setItem(`player ${this.number} symbol`, this.custom_symbol);
-                this.input_symbol.value = '';
+                if(this.input_symbol.value !== '') {
+                    this.custom_symbol = this.input_symbol.value;
+                    this.scoreboard_symbol.innerHTML = this.custom_symbol;
+                    localStorage.setItem(`player ${this.number} symbol`, this.custom_symbol);
+                    this.input_symbol.value = '';
+                } else {
+                    alert("Please ensure the symbol field isn't blank");
+                }
             } else {
                 alert('Please no changes to symbol during the game');
             }
         })
     }
 
+    changeSymbolToUploaded() {
+        this.upload_symbol.addEventListener('change', (event) => {
+            if(newGame() === true) {
+                let img = document.createElement('img');
+                img.src = URL.createObjectURL(event.target.files[0]);
+                img.id = `player-img-${this.number}`
+                this.scoreboard_symbol.innerHTML = ''
+                this.scoreboard_symbol.appendChild(img);
+                this.custom_symbol = img.id
+            } else {
+                alert("Please no changes to symbol during the game");
+            }})
+        }       
+
     addToScore(value) {
         this.score += value;
-        this.scoreboard_score.innerText = this.score;
+        this.scoreboard_score.innerHTML = this.score;
         (localStorage.setItem(`player ${this.number} score`, this.score))
     }
 
     resetName() {
         localStorage.removeItem(`player ${this.number} name`);
         this.name = `Player ${this.number}`;
-        this.scoreboard_name.innerText = this.name;
+        this.scoreboard_name.innerHTML = this.name;
     }
 
     resetSymbol() {
         localStorage.removeItem(`player ${this.number} symbol`);
-        this.scoreboard_symbol.innerText = this.default_symbol;
+        this.scoreboard_symbol.innerHTML = this.default_symbol;
     }
 }
 
@@ -96,6 +120,9 @@ player1.changeName();
 player2.changeName();
 player1.changeSymbol();
 player2.changeSymbol();
+player1.changeSymbolToUploaded();
+player2.changeSymbolToUploaded();
+
 
 let rounds;
 const countOfRounds = () => {
@@ -163,7 +190,7 @@ const overlayOn = (outcome) => {
     const overlay = document.querySelector("#overlay");
     overlay.style.display = "block";
     const overlayText = document.querySelector("#overlay>div>p");
-    overlayText.innerText = `End of round: \n${outcome}`;
+    overlayText.innerHTML = `End of round: \n${outcome}`;
   }
   
 const overlayOff = () => {
@@ -197,8 +224,8 @@ const isGameEnded = () => {
 const gameOutcome = () => {
     // The winner variable checks if one of the winning combinations has been hit by either the X or O
 
-    const player1Win = winningCombinations.some(value => value.every(v => (v === player1.default_symbol) || (v === player1.custom_symbol)));
-    const player2Win = winningCombinations.some(value => value.every(v => (v === player2.default_symbol) || (v=== player2.custom_symbol)));
+    const player1Win = winningCombinations.some(value => value.every(v => (v === player1.default_symbol) || (v === player1.custom_symbol) || (v.search(player1.custom_symbol) !== -1)));
+    const player2Win = winningCombinations.some(value => value.every(v => (v === player2.default_symbol) || (v=== player2.custom_symbol) || (v.search(player2.custom_symbol) !== -1)));
 
     // The boardNotFull variable checks if there is still space on the board
     const boardNotFull = gridButtonsArr.some(value => value === '')
@@ -230,9 +257,9 @@ const changeTurn = (nextGo) => {
 const gridEventListener = () => {
     gridButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
-            if(button.innerText === '' && isGameEnded() !== true) {
-                button.innerText = document.querySelector('#current-go').innerText;
-                gridButtonsArr[index] = button.innerText;
+            if(button.innerHTML === '' && isGameEnded() !== true) {
+                button.innerHTML = document.querySelector('#current-go').innerHTML;
+                gridButtonsArr[index] = button.innerHTML;
                 audio('click_sound.mp3');
                 button.id = 'clicked';
                 if(isGameEnded() === true) {
@@ -257,7 +284,7 @@ const restartGame = (button) => {
     button.addEventListener('click', function() {
         overlayOff();
         gridButtons.forEach((value, index) => {
-            value.innerText = '';
+            value.innerHTML = '';
             value.id = index;
         });
         gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');

@@ -180,6 +180,11 @@ button {
     margin-right: 30px;
 }
 
+img[id^="player-img"] {
+    max-width: 40px;
+    max-height: 40px;
+}
+
 @media screen and (max-height: 807px) {
     main {
         height: 250px;

@@ -1,3 +1,49 @@
+class RepetitiveElements {
+    constructor(number) {
+        this.number = number;
+    }
+    createNewElement(elementType, className, idName, type, dataName, innerHTML, parentDiv, multiple, accept) {
+        const element = document.createElement(elementType);
+        element.className = className;
+        element.id = idName;
+        element.type = type;
+        element.dataset.name = dataName;
+        element.innerHTML = innerHTML
+        document.querySelector(parentDiv).appendChild(element);
+        element.multiple = multiple;
+        element.accept = accept;
+    }
+
+    loadPlayerSettings() {
+        this.createNewElement('h2', 'player-heading', `player${this.number}-heading`, '', '', `Player ${this.number}`, `#player${this.number}-profile`);
+        this.createNewElement('p', 'name-paragraph', `player${this.number}-name`, '', '', `name`, `#player${this.number}-profile`);
+        this.createNewElement('input', 'name-input', `name-input-${this.number}`, 'text', '', '', `#player${this.number}-profile`);
+        this.createNewElement('button', 'submit-name', `submit-name-${this.number}`, '', '', 'Submit', `#player${this.number}-profile`);
+        this.createNewElement('p', 'symbol-paragraph', `player${this.number}-symbol`, '', '', `Symbol`, `#player${this.number}-profile`);
+        this.createNewElement('input', 'name-input', `symbol-input-${this.number}`, 'text', '', '', `#player${this.number}-profile`);
+        this.createNewElement('button', 'submit-symbol', `submit-symbol-${this.number}`, '', '', 'Submit', `#player${this.number}-profile`);
+        this.createNewElement('p', 'custom-symbol-paragraph', `player${this.number}-custom-symbol`, '', '', `or`, `#player${this.number}-profile`);
+        this.createNewElement('input', 'fileupload', `fileupload-${this.number}`, 'file', '', '', `#player${this.number}-profile`, false, 'image/*');
+        this.createNewElement('p', 'counter', '', '', `counter-${this.number}`, '', "#counters");
+        this.createNewElement('p', 'player-name', `player-name-${this.number}`, '', '', '', '#player-names');
+        this.createNewElement('div', 'scores', `score-player-${this.number}`, '', '', '', '#scores')
+    }
+
+    loadGrid() {
+        for (let i = 1; i < 10; i++) {
+            this.createNewElement('div', 'grid-item', `${i}`, '', '', '', '.grid-container');
+        }
+    }
+}
+
+const player1Elements = new RepetitiveElements(1);
+const player2Elements = new RepetitiveElements(2);
+const otherElements = new RepetitiveElements();
+
+player1Elements.loadPlayerSettings();
+player2Elements.loadPlayerSettings();
+otherElements.loadGrid();
+
 const gridButtons = document.querySelectorAll('.grid-item');
 const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerHTML);
 
@@ -15,7 +61,7 @@ class Player {
         this.custom_symbol;
         this.score;
         this.scoreboard_name = document.querySelector(`#player-name-${this.number}`);
-        this.scoreboard_symbol = document.querySelector(`[data-number*="counter-${this.number}"]`);
+        this.scoreboard_symbol = document.querySelector(`[data-name*="counter-${this.number}"]`);
         this.scoreboard_score = document.querySelector(`#score-player-${this.number}`);
         this.submit_name_button = document.querySelector(`#submit-name-${this.number}`);
         this.input_name = document.querySelector(`#name-input-${this.number}`);
@@ -151,6 +197,9 @@ const firstTurn = () => {
         turns[1].id = '';
     }
 }
+
+firstTurn();
+
 const volumeButton = document.querySelector('.sound-button');
 
 const volume = (value) => {

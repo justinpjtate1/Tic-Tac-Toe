@@ -93,7 +93,7 @@ main {
     pointer-events: none;
 }
 
-#current-go {
+[data-name = 'current-go'] {
     background-color: red;
     border-radius: 100%;
 }

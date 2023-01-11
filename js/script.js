@@ -2,12 +2,11 @@ class RepetitiveElements {
     constructor(number) {
         this.number = number;
     }
-    createNewElement(elementType, className, idName, type, dataName, innerHTML, parentDiv, multiple, accept) {
+    createNewElement(elementType, className, idName, type, innerHTML, parentDiv, multiple, accept) {
         const element = document.createElement(elementType);
         element.className = className;
         element.id = idName;
         element.type = type;
-        element.dataset.name = dataName;
         element.innerHTML = innerHTML
         document.querySelector(parentDiv).appendChild(element);
         element.multiple = multiple;
@@ -15,23 +14,23 @@ class RepetitiveElements {
     }
 
     loadPlayerSettings() {
-        this.createNewElement('h2', 'player-heading', `player${this.number}-heading`, '', '', `Player ${this.number}`, `#player${this.number}-profile`);
-        this.createNewElement('p', 'name-paragraph', `player${this.number}-name`, '', '', `name`, `#player${this.number}-profile`);
-        this.createNewElement('input', 'name-input', `name-input-${this.number}`, 'text', '', '', `#player${this.number}-profile`);
-        this.createNewElement('button', 'submit-name', `submit-name-${this.number}`, '', '', 'Submit', `#player${this.number}-profile`);
-        this.createNewElement('p', 'symbol-paragraph', `player${this.number}-symbol`, '', '', `Symbol`, `#player${this.number}-profile`);
-        this.createNewElement('input', 'name-input', `symbol-input-${this.number}`, 'text', '', '', `#player${this.number}-profile`);
-        this.createNewElement('button', 'submit-symbol', `submit-symbol-${this.number}`, '', '', 'Submit', `#player${this.number}-profile`);
-        this.createNewElement('p', 'custom-symbol-paragraph', `player${this.number}-custom-symbol`, '', '', `or`, `#player${this.number}-profile`);
-        this.createNewElement('input', 'fileupload', `fileupload-${this.number}`, 'file', '', '', `#player${this.number}-profile`, false, 'image/*');
-        this.createNewElement('p', 'counter', '', '', `counter-${this.number}`, '', "#counters");
-        this.createNewElement('p', 'player-name', `player-name-${this.number}`, '', '', '', '#player-names');
-        this.createNewElement('div', 'scores', `score-player-${this.number}`, '', '', '', '#scores')
+        this.createNewElement('h2', 'player-heading', `player${this.number}-heading`, '', `Player ${this.number}`, `#player${this.number}-profile`);
+        this.createNewElement('p', 'name-paragraph', `player${this.number}-name`, '', `name`, `#player${this.number}-profile`);
+        this.createNewElement('input', 'name-input', `name-input-${this.number}`, 'text', '', `#player${this.number}-profile`);
+        this.createNewElement('button', 'submit-name', `submit-name-${this.number}`, '', 'Submit', `#player${this.number}-profile`);
+        this.createNewElement('p', 'symbol-paragraph', `player${this.number}-symbol`, '', `Symbol`, `#player${this.number}-profile`);
+        this.createNewElement('input', 'name-input', `symbol-input-${this.number}`, 'text', '', `#player${this.number}-profile`);
+        this.createNewElement('button', 'submit-symbol', `submit-symbol-${this.number}`, '', 'Submit', `#player${this.number}-profile`);
+        this.createNewElement('p', 'custom-symbol-paragraph', `player${this.number}-custom-symbol`, '', `or`, `#player${this.number}-profile`);
+        this.createNewElement('input', 'fileupload', `fileupload-${this.number}`, 'file', '', `#player${this.number}-profile`, false, 'image/*');
+        this.createNewElement('p', 'counter', `counter-${this.number}`, '', '', "#counters");
+        this.createNewElement('p', 'player-name', `player-name-${this.number}`, '', '', '#player-names');
+        this.createNewElement('div', 'scores', `score-player-${this.number}`, '', '', '#scores')
     }
 
     loadGrid() {
         for (let i = 1; i < 10; i++) {
-            this.createNewElement('div', 'grid-item', `${i}`, '', '', '', '.grid-container');
+            this.createNewElement('div', 'grid-item', `${i}`, '', '', '.grid-container');
         }
     }
 }
@@ -61,7 +60,7 @@ class Player {
         this.custom_symbol;
         this.score;
         this.scoreboard_name = document.querySelector(`#player-name-${this.number}`);
-        this.scoreboard_symbol = document.querySelector(`[data-name*="counter-${this.number}"]`);
+        this.scoreboard_symbol = document.querySelector(`#counter-${this.number}`);
         this.scoreboard_score = document.querySelector(`#score-player-${this.number}`);
         this.submit_name_button = document.querySelector(`#submit-name-${this.number}`);
         this.input_name = document.querySelector(`#name-input-${this.number}`);
@@ -190,11 +189,11 @@ const turns = document.querySelectorAll('.counter');
 
 const firstTurn = () => {
     if(newGame() === true && rounds % 2 !== 0) {
-        turns[0].id = '';
-        turns[1].id = 'current-go';
+        turns[0].dataset.name = '';
+        turns[1].dataset.name = 'current-go';
     } else {
-        turns[0].id = 'current-go';
-        turns[1].id = '';
+        turns[0].dataset.name = 'current-go';
+        turns[1].dataset.name = '';
     }
 }
 
@@ -273,8 +272,8 @@ const isGameEnded = () => {
 const gameOutcome = () => {
     // The winner variable checks if one of the winning combinations has been hit by either the X or O
 
-    const player1Win = winningCombinations.some(value => value.every(v => (v === player1.default_symbol) || (v === player1.custom_symbol) || (v.search(player1.custom_symbol) !== -1)));
-    const player2Win = winningCombinations.some(value => value.every(v => (v === player2.default_symbol) || (v=== player2.custom_symbol) || (v.search(player2.custom_symbol) !== -1)));
+    const player1Win = winningCombinations.some(value => value.every(v => (v === player1.default_symbol) || (typeof(player1.custom_symbol) !== 'undefined' && v.search(player1.custom_symbol) !== -1)));
+    const player2Win = winningCombinations.some(value => value.every(v => (v === player2.default_symbol) || (typeof(player1.custom_symbol) !== 'undefined' && v.search(player2.custom_symbol) !== -1)));
 
     // The boardNotFull variable checks if there is still space on the board
     const boardNotFull = gridButtonsArr.some(value => value === '')
@@ -292,14 +291,25 @@ const gameOutcome = () => {
 }
 
 // This function displays the change in turn on the page;
+// const turnsArr = Array.prototype.slice.call(turns);
+// const changeTurn = (nextGo) => {
+//     turnsArr.forEach(turn => {
+//         if(turn.dataset.name === 'current-go') {
+//             turn.dataset.name = ""
+//         } else if ((turn.datset.name === "") && (nextGo === true)) {
+//             turn.dataset.name = 'current-go'
+//         }
+//     })
+// }
+
 const changeTurn = (nextGo) => {
-    turns.forEach(turn => {
-        if(turn.id === 'current-go') {
-            turn.id = ''
-        } else if (turn.id === '' && nextGo === true) {
-            turn.id = 'current-go'
+    for (let i = 0; i < turns.length; i++) {
+        if(turns[i].dataset.name === 'current-go') {
+            turns[i].dataset.name = '';
+        } else if (turns[i].dataset.name === '' && nextGo === true) {
+            turns[i].dataset.name = 'current-go'
         }
-    })
+    }
 }
 
 // This function adds an event listener to each tile
@@ -307,7 +317,7 @@ const gridEventListener = () => {
     gridButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
             if(button.innerHTML === '' && isGameEnded() !== true) {
-                button.innerHTML = document.querySelector('#current-go').innerHTML;
+                button.innerHTML = document.querySelector(`[data-name*="current-go"]`).innerHTML;
                 gridButtonsArr[index] = button.innerHTML;
                 audio('click_sound.mp3');
                 button.id = 'clicked';

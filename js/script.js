@@ -1,4 +1,3 @@
-//Takes the 9 grid buttons from the page
 class Player {
     constructor(number, symbol) {
         this.number = number;
@@ -63,11 +62,42 @@ player2.changeSymbol();
 
 const gridButtons = document.querySelectorAll('.grid-item');
 
-// Gathers the X and O elements on page
+
+let rounds;
+const countOfRounds = () => {
+    if(localStorage.getItem(`rounds`) !== null) {
+        rounds = +(localStorage.getItem(`rounds`));
+    } else {
+        rounds = 0;
+    }
+}
+
+const nextRound = () => {
+    rounds += 1;
+    localStorage.setItem(`rounds`, rounds);
+};
+
+countOfRounds();
+
 const turns = document.querySelectorAll('.counter');
 
 const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
 
+const newGame = () => {
+    if(gridButtonsArr.every(value => value === '') === true) {
+        return true;
+    }
+}
+
+const firstTurn = () => {
+    if(newGame() === true && rounds % 2 !== 0) {
+        turns[0].id = '';
+        turns[1].id = 'current-go';
+    } else {
+        turns[0].id = 'current-go';
+        turns[1].id = '';
+    }
+}
 const volumeButton = document.querySelector('.sound-button');
 
 const volume = (value) => {
@@ -205,9 +235,13 @@ const restartGame = (button) => {
             value.id = index;
         });
         gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
-        turns[0].id = 'current-go';
-        turns[1].id = '';
         audio('restart_game.mp3');
+        newGame();
+        if(button.textContent === "Next Round!") {
+            nextRound();
+            firstTurn();
+        }
+        firstTurn();
     })
 }
 
@@ -220,6 +254,9 @@ const resetGame = (button) => {
         player2.currentScore(0);
         localStorage.removeItem('player 1');
         localStorage.removeItem('player 2');
+        localStorage.removeItem('rounds');
+        countOfRounds();
+        firstTurn();
     })
 };
 

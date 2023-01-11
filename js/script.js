@@ -1,8 +1,18 @@
+const gridButtons = document.querySelectorAll('.grid-item');
+const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
+
+const newGame = () => {
+    if(gridButtonsArr.every(value => value === '') === true) {
+        return true;
+    }
+}
+
 class Player {
     constructor(number, symbol) {
         this.number = number;
         this.name = `Player ${this.number}`;
-        this.symbol = symbol;
+        this.default_symbol = symbol;
+        this.custom_symbol;
         this.score;
         this.scoreboard_name = document.querySelector(`#player-name-${this.number}`);
         this.scoreboard_symbol = document.querySelector(`[data-number*="counter-${this.number}"]`);
@@ -19,10 +29,18 @@ class Player {
     }
 
     addDetailsToScoreboard() {
+        if(localStorage.getItem(`player ${this.number} name`) !== null) {
+            this.name = localStorage.getItem(`player ${this.number} name`);
+        }
         this.scoreboard_name.innerText = this.name;
-        this.scoreboard_symbol.innerText = this.symbol;
-        if(localStorage.getItem(`player ${this.number}`) !== null) {
-            this.currentScore(localStorage.getItem(`player ${this.number}`))
+        if(localStorage.getItem(`player ${this.number} symbol`) !== null) {
+            this.custom_symbol = localStorage.getItem(`player ${this.number} symbol`);
+            this.scoreboard_symbol.innerText = this.custom_symbol;
+        } else {
+            this.scoreboard_symbol.innerText = this.default_symbol;
+        }
+        if(localStorage.getItem(`player ${this.number} score`) !== null) {
+            this.currentScore(localStorage.getItem(`player ${this.number} score`))
         } else {
             this.currentScore(0)
         }   
@@ -32,20 +50,39 @@ class Player {
         this.submit_name_button.addEventListener('click', () => {
             this.name = this.input_name.value;
             this.scoreboard_name.innerText = this.name;
+            localStorage.setItem(`player ${this.number} name`, this.name);
+            this.input_name.value = '';
         })
     }
 
     changeSymbol() {
         this.submit_symbol_button.addEventListener('click', () => {
-            this.symbol = this.input_symbol.value;
-            this.scoreboard_symbol.innerText = this.symbol;
+            if(newGame() === true) {
+                this.custom_symbol = this.input_symbol.value;
+                this.scoreboard_symbol.innerText = this.custom_symbol;
+                localStorage.setItem(`player ${this.number} symbol`, this.custom_symbol);
+                this.input_symbol.value = '';
+            } else {
+                alert('Please no changes to symbol during the game');
+            }
         })
     }
 
     addToScore(value) {
         this.score += value;
         this.scoreboard_score.innerText = this.score;
-        (localStorage.setItem(`player ${this.number}`, this.score))
+        (localStorage.setItem(`player ${this.number} score`, this.score))
+    }
+
+    resetName() {
+        localStorage.removeItem(`player ${this.number} name`);
+        this.name = `Player ${this.number}`;
+        this.scoreboard_name.innerText = this.name;
+    }
+
+    resetSymbol() {
+        localStorage.removeItem(`player ${this.number} symbol`);
+        this.scoreboard_symbol.innerText = this.default_symbol;
     }
 }
 
@@ -59,9 +96,6 @@ player1.changeName();
 player2.changeName();
 player1.changeSymbol();
 player2.changeSymbol();
-
-const gridButtons = document.querySelectorAll('.grid-item');
-
 
 let rounds;
 const countOfRounds = () => {
@@ -80,14 +114,6 @@ const nextRound = () => {
 countOfRounds();
 
 const turns = document.querySelectorAll('.counter');
-
-const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerText);
-
-const newGame = () => {
-    if(gridButtonsArr.every(value => value === '') === true) {
-        return true;
-    }
-}
 
 const firstTurn = () => {
     if(newGame() === true && rounds % 2 !== 0) {
@@ -171,8 +197,8 @@ const isGameEnded = () => {
 const gameOutcome = () => {
     // The winner variable checks if one of the winning combinations has been hit by either the X or O
 
-    const player1Win = winningCombinations.some(value => value.every(v => v === player1.symbol));
-    const player2Win = winningCombinations.some(value => value.every(v => v === player2.symbol));
+    const player1Win = winningCombinations.some(value => value.every(v => (v === player1.default_symbol) || (v === player1.custom_symbol)));
+    const player2Win = winningCombinations.some(value => value.every(v => (v === player2.default_symbol) || (v=== player2.custom_symbol)));
 
     // The boardNotFull variable checks if there is still space on the board
     const boardNotFull = gridButtonsArr.some(value => value === '')
@@ -180,10 +206,10 @@ const gameOutcome = () => {
     // This if statement prints an outcome to the page when there is one. Use this.number maybe to cut down the if?
     if (player1Win === true) {
         player1.addToScore(1);
-        overlayOn(`${player1.name} (${player1.symbol}) wins`);
+        overlayOn(`${player1.name} wins`);
     } else if (player2Win === true) {
         player2.addToScore(1);
-        overlayOn(`${player2.name} (${player2.symbol}) wins`);
+        overlayOn(`${player2.name} wins`);
     } else if (boardNotFull === false) {
         overlayOn('Draw');
     }
@@ -252,8 +278,8 @@ const resetGame = (button) => {
     button.addEventListener('click', function() {
         player1.currentScore(0);
         player2.currentScore(0);
-        localStorage.removeItem('player 1');
-        localStorage.removeItem('player 2');
+        localStorage.removeItem('player 1 score');
+        localStorage.removeItem('player 2 score');
         localStorage.removeItem('rounds');
         countOfRounds();
         firstTurn();
@@ -262,3 +288,20 @@ const resetGame = (button) => {
 
 const resetGameButtons = document.querySelectorAll('#reset-game');
 resetGameButtons.forEach(button => resetGame(button));
+
+const resetPlayers = () => {
+    player1.resetName();
+    player2.resetName();
+    player1.resetSymbol();
+    player2.resetSymbol();
+}
+
+const resetPlayerButton = document.querySelector('#reset-players')
+
+resetPlayerButton.addEventListener('click', () => {
+    if(newGame() === true) {
+        resetPlayers();
+    } else {
+        alert('Please no changing players during the game');
+    }
+})

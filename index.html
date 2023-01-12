@@ -11,38 +11,41 @@
     <header>
         <h1>Classic Tic Tac Toe</h1>
     </header>
-    <section id="game-information">
-        <section class= "profile" id="player1-profile">
-        </section>
-        <div id="scoreboard">
-            <section id="counters">
-            </section>
-            <section id="player-names">
-            </section>
-            <section id="scores">
-            </section>
-        </div>
-        <section class= "profile" id="player2-profile">
-        </section>
-    </section>
     <div id="overlay">
-        <div id="text">
-            <p></p>
-            <button id="restart">Next Round!</button>
-            <button id="reset-game">Reset Game!</button>
+        <div id="overlay-text">
+            <p id="end-round-message"></p>
+            <button class="restart-button" id="next-round">Next Round!</button>
+            <button class="reset-button" id="reset-game">Reset Game!</button>
         </div>
-        
     </div>
     <main>
-        <div class="grid-container">
-        </div>
-        <img src="" alt="sound-button" class="sound-button" id="" style="float:right;">
+        <section id="game-information">
+            <section class= "profile" id="player1-profile">
+            </section>
+            <div id="scoreboard">
+                <section id="counters">
+                </section>
+                <section id="player-names">
+                </section>
+                <section id="scores">
+                </section>
+            </div>
+            <section class= "profile" id="player2-profile">
+            </section>
+        </section>
+        <section id="game-area">
+            <section id="board">
+                <div class="grid-container">
+                </div>
+                <img src="" alt="sound-button" class="sound-button" id="" style="float:right;">
+            </section>
+            <section class="restart">
+                <button class="restart-button" id="restart-round">Restart Round!</button>
+                <button class="reset-button" id="reset-game">Reset Game!</button>
+                <button class="reset-button" id="reset-players">Reset Players to Default!</button>
+            </section>
+        </section>
     </main>
-    <section class="restart">
-        <button id="restart">Restart Round!</button>
-        <button id="reset-game">Reset Game!</button>
-        <button id="reset-players">Reset Players to Default!</button>
-    </section>
     <footer>
         By Justin Tate
     </footer>

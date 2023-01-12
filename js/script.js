@@ -15,17 +15,21 @@ class RepetitiveElements {
 
     loadPlayerSettings() {
         this.createNewElement('h2', 'player-heading', `player${this.number}-heading`, '', `Player ${this.number}`, `#player${this.number}-profile`);
-        this.createNewElement('p', 'name-paragraph', `player${this.number}-name`, '', `name`, `#player${this.number}-profile`);
-        this.createNewElement('input', 'name-input', `name-input-${this.number}`, 'text', '', `#player${this.number}-profile`);
-        this.createNewElement('button', 'submit-name', `submit-name-${this.number}`, '', 'Submit', `#player${this.number}-profile`);
-        this.createNewElement('p', 'symbol-paragraph', `player${this.number}-symbol`, '', `Symbol`, `#player${this.number}-profile`);
-        this.createNewElement('input', 'name-input', `symbol-input-${this.number}`, 'text', '', `#player${this.number}-profile`);
-        this.createNewElement('button', 'submit-symbol', `submit-symbol-${this.number}`, '', 'Submit', `#player${this.number}-profile`);
+        this.createNewElement('div', 'fields', `name-fields-${this.number}`, '', '', `#player${this.number}-profile`);
+        this.createNewElement('div', 'fields', `symbol-fields-${this.number}`, '', '', `#player${this.number}-profile`);
         this.createNewElement('p', 'custom-symbol-paragraph', `player${this.number}-custom-symbol`, '', `or`, `#player${this.number}-profile`);
-        this.createNewElement('input', 'fileupload', `fileupload-${this.number}`, 'file', '', `#player${this.number}-profile`, false, 'image/*');
+        this.createNewElement('div', 'fields', `custom-symbol-fields-${this.number}`, '', '', `#player${this.number}-profile`);
+        this.createNewElement('p', 'name-paragraph', `player${this.number}-name`, '', `name`, `#name-fields-${this.number}`);
+        this.createNewElement('input', 'name-input', `name-input-${this.number}`, 'text', '', `#name-fields-${this.number}`);
+        this.createNewElement('button', 'submit', `submit-name-${this.number}`, '', 'Submit', `#name-fields-${this.number}`);
+        this.createNewElement('p', 'symbol-paragraph', `player${this.number}-symbol`, '', `Symbol`, `#symbol-fields-${this.number}`);
+        this.createNewElement('input', 'name-input', `symbol-input-${this.number}`, 'text', '', `#symbol-fields-${this.number}`);
+        this.createNewElement('button', 'submit', `submit-symbol-${this.number}`, '', 'Submit', `#symbol-fields-${this.number}`);
+        this.createNewElement('input', 'fileupload', `fileupload-${this.number}`, 'file', '', `#custom-symbol-fields-${this.number}`, false, 'image/*');
         this.createNewElement('p', 'counter', `counter-${this.number}`, '', '', "#counters");
         this.createNewElement('p', 'player-name', `player-name-${this.number}`, '', '', '#player-names');
-        this.createNewElement('div', 'scores', `score-player-${this.number}`, '', '', '#scores')
+        this.createNewElement('div', 'scores', `score-player-${this.number}`, '', '', '#scores');
+        this.createNewElement('div', 'fields', `name-fields-${this.number}`, '', '', `#player${this.number}-profile`);
     }
 
     loadGrid() {
@@ -237,7 +241,7 @@ const audio = (filename) => {
 const overlayOn = (outcome) => {
     const overlay = document.querySelector("#overlay");
     overlay.style.display = "block";
-    const overlayText = document.querySelector("#overlay>div>p");
+    const overlayText = document.querySelector("#end-round-message");
     overlayText.innerHTML = `End of round: \n${outcome}`;
   }
   
@@ -337,7 +341,7 @@ const gridEventListener = () => {
 gridEventListener();
 
 // This restarts the game if you press the Restart Game button
-const restartGameButtons = document.querySelectorAll('#restart');
+const restartGameButtons = document.querySelectorAll('.restart-button');
 
 const restartGame = (button) => {
     button.addEventListener('click', function() {

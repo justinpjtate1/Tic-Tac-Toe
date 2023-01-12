@@ -19,7 +19,7 @@ body {
     flex-direction: column;
     text-align: center;
     font-family: 'TicTacToeFont', Fallback, sans-serif;
-    background-image: url('white-brick-wall-textured-background.webp');
+    background-image: url('resources/white-brick-wall-textured-background.webp');
     background-size: cover;
 }
 

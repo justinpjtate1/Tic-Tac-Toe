@@ -20,8 +20,8 @@ class RepetitiveElements {
     }
 
     changeIdOfClonedElement (clonedElement, newId) {
-        clonedElement.id = clonedElement.id.replace("0", `${newId}`);
-        clonedElement.innerHTML = clonedElement.innerHTML.replace("0", `${newId}`);
+        clonedElement.id = clonedElement.id.replace(`0`, `${newId}`);
+        clonedElement.innerHTML = clonedElement.innerHTML.replace(`0`, `${newId}`);
     }
 
     changeIdOfClonedChildElements (clonedElement, newId) {
@@ -47,7 +47,7 @@ class RepetitiveElements {
 
     loadGrid() {
         for (let i = 1; i < 10; i++) {
-            this.createNewGridElement('div', 'grid-item', `${i}`, '.grid-container');
+            this.createNewGridElement(`div`, `grid-item`, `${i}`, `.grid-container`);
         }
     }
 }
@@ -56,22 +56,23 @@ class RepetitiveElements {
 // Invoking the functions that allow us to render the repetitve elements.
 
 const repetitiveElements = new RepetitiveElements(2);
-repetitiveElements.loadPlayerElements('#player0-profile', '#game-information', 'block');
-repetitiveElements.loadPlayerElements('#counter-0', '#counters', 'inline-block');
-repetitiveElements.loadPlayerElements('#player-name-0', '#player-names', 'inline-block');
-repetitiveElements.loadPlayerElements('#score-player-0', '#scores', 'inline-block');
+repetitiveElements.loadPlayerElements(`#player0-profile`, `#game-information`, `block`);
+repetitiveElements.loadPlayerElements(`#counter-0`, `#counters`, `inline-block`);
+repetitiveElements.loadPlayerElements(`#player-name-0`, `#player-names`, `inline-block`);
+repetitiveElements.loadPlayerElements(`#score-player-0`, `#scores`, `inline-block`);
 repetitiveElements.loadGrid();
+
 
 // Creating an array of the contents of each grid item.
 
-const gridButtons = document.querySelectorAll('.grid-item');
+const gridButtons = document.querySelectorAll(`.grid-item`);
 const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerHTML);
 
 
 // A function that checks whether the round of Tic Tac Toe is new, or in progress.
 
-const  newRound = () => {
-    if(gridButtonsArr.every(value => value === '') === true) {
+const  checkIfNewRound = () => {
+    if(gridButtonsArr.every(value => value === ``) === true) {
         return true;
     }
 }
@@ -120,48 +121,55 @@ class Player {
     }
 
     changeName() {
-        this.submit_name_button.addEventListener('click', () => {
-            if(this.input_name.value !== '') {
+        this.submit_name_button.addEventListener(`click`, () => {
+            if(this.input_name.value !== ``) {
                 this.name = this.input_name.value;
                 this.scoreboard_name.innerHTML = this.name;
                 localStorage.setItem(`player ${this.number} name`, this.name);
-                this.input_name.value = '';
+                this.input_name.value = ``;
             } else {
-                alert("Please ensure the name field isn't blank");
+                alert(`Please ensure the name field isn't blank`);
             }
         })
     }
 
-    changeSymbol() {
-        this.submit_symbol_button.addEventListener('click', () => {
-            if(newRound() === true) {
-                if(this.input_symbol.value !== '') {
-                    this.custom_symbol = this.input_symbol.value;
-                    this.scoreboard_symbol.innerHTML = this.custom_symbol;
-                    localStorage.setItem(`player ${this.number} symbol`, this.custom_symbol);
-                    this.input_symbol.value = '';
-                } else {
-                    alert("Please ensure the symbol field isn't blank");
-                }
+    customSymbol() {
+        if(this.input_symbol.value !== ``) {
+            this.custom_symbol = this.input_symbol.value;
+            this.scoreboard_symbol.innerHTML = this.custom_symbol;
+            localStorage.setItem(`player ${this.number} symbol`, this.custom_symbol);
+            this.input_symbol.value = ``;
+        }
+    }
+
+    uploadedSymbol(event) {
+        let img = document.createElement(`img`);
+        img.src = URL.createObjectURL(event.target.files[0]);
+        img.id = `player-img-${this.number}`
+        this.scoreboard_symbol.innerHTML = ``
+        this.scoreboard_symbol.appendChild(img);
+        this.custom_symbol = img.id
+    }
+
+    changeSymbolToCustom() {
+        this.submit_symbol_button.addEventListener(`click`, () => {
+            if(checkIfNewRound() === true) {
+                this.customSymbol();
             } else {
-                alert('Please no changes to symbol during the game');
+                alert(`Please no changes to the symbol during the game`);
             }
         })
     }
 
     changeSymbolToUploaded() {
-        this.upload_symbol.addEventListener('change', (event) => {
-            if(newRound() === true) {
-                let img = document.createElement('img');
-                img.src = URL.createObjectURL(event.target.files[0]);
-                img.id = `player-img-${this.number}`
-                this.scoreboard_symbol.innerHTML = ''
-                this.scoreboard_symbol.appendChild(img);
-                this.custom_symbol = img.id
+        this.upload_symbol.addEventListener(`change`, (event) => {
+            if(checkIfNewRound() === true) {
+                this.upload_symbol();
             } else {
-                alert("Please no changes to symbol during the game");
-            }})
-        }       
+                alert(`Please no changes to the symbol during the game`);
+            }
+        })
+    }       
 
     addToScore(value) {
         this.score += value;
@@ -181,26 +189,26 @@ class Player {
     }
 }
 
-
 // Define the players in the game and invoke the information needed.
 
-const player1 = new Player(1, 'X');
+const player1 = new Player(1, `X`);
 player1.addDetailsToScoreboard();
 
-const player2 = new Player(2, 'O');
+const player2 = new Player(2, `O`);
 player2.addDetailsToScoreboard();
 
 player1.changeName();
 player2.changeName();
-player1.changeSymbol();
-player2.changeSymbol();
+player1.changeSymbolToCustom();
+player2.changeSymbolToCustom();
 player1.changeSymbolToUploaded();
 player2.changeSymbolToUploaded();
 
 
 // Determines whether the game is just starting, or whether it's an existing game.
+
 let rounds;
-const countOfRounds = () => {
+const determineCountOfRounds = () => {
     if(localStorage.getItem(`rounds`) !== null) {
         rounds = +(localStorage.getItem(`rounds`));
     } else {
@@ -213,54 +221,65 @@ const nextRound = () => {
     localStorage.setItem(`rounds`, rounds);
 };
 
-countOfRounds();
-
+determineCountOfRounds();
 
 // Determines who's turn it is based on how many rounds there's been in the game.
 
-const turns = document.querySelectorAll('.counter');
+const turns = document.querySelectorAll(`.counter`);
 
-const firstTurn = () => {
-    if(newRound() === true && rounds % 2 !== 0) {
-        turns[0].dataset.name = '';
-        turns[1].dataset.name = 'current-go';
+const determineFirstTurn = () => {
+    if(checkIfNewRound() === true && rounds % 2 !== 0) {
+        turns[0].dataset.name = ``;
+        turns[1].dataset.name = `current-go`;
     } else {
-        turns[0].dataset.name = 'current-go';
-        turns[1].dataset.name = '';
+        turns[0].dataset.name = `current-go`;
+        turns[1].dataset.name = ``;
     }
 }
 
-firstTurn();
+determineFirstTurn();
+
+// Changes player turn when invoked
+
+const changeTurn = (nextGo) => {
+    for (let i = 0; i < turns.length; i++) {
+        if(turns[i].dataset.name === `current-go`) {
+            turns[i].dataset.name = ``;
+        } else if (turns[i].dataset.name === `` && nextGo === true) {
+            turns[i].dataset.name = `current-go`
+        }
+    }
+}
 
 
 // Determines whether the volume should be on
 
-const volumeButton = document.querySelector('.sound-button');
+const volumeElement = document.querySelector(`.sound-button`);
 
 const volume = (value) => {
-    volumeButton.id = 'resources/sound-button-' + value;
-    volumeButton.src = 'resources/sound-' + value + '.png';
+    volumeElement.id = `resources/sound-button-${value}`;
+    volumeElement.src = `resources/sound-${value}.png`;
 }
 
 const volumeToggle = () => {
-    if(localStorage.getItem('volume') === 'sound-button-off') {
-        volume('off');
+    if(localStorage.getItem(`volume`) === `sound-button-off`) {
+        volume(`off`);
         return false
     } else {
-        volume('on');
+        volume(`on`);
         return true
     }
 }
 
 volumeToggle();
 
-volumeButton.addEventListener('click', function() {
+volumeElement.addEventListener(`click`, function() {
     if(volumeToggle() === true) {
-        volume('off');
-        localStorage.setItem('volume', 'sound-button-off');
+        volume(`off`);
+        localStorage.setItem(`volume`, `sound-button-off`);
     } else {
-        volume('on');
-        localStorage.setItem('volume', 'sound-button-on');
+        volume(`on`);
+        localStorage.setItem(`volume`, `sound-button-on`);
     }
 })
 
@@ -274,14 +293,14 @@ const audio = (filename) => {
 // Defines the functionality of the overlay that pops up once the round has ended
 
 const overlayOn = (outcome) => {
-    const overlay = document.querySelector("#overlay");
-    overlay.style.display = "block";
-    const overlayText = document.querySelector("#end-round-message");
+    const overlay = document.querySelector(`#overlay`);
+    overlay.style.display = `block`;
+    const overlayText = document.querySelector(`#end-round-message`);
     overlayText.innerHTML = `End of round: \n${outcome}`;
   }
   
 const overlayOff = () => {
-    document.querySelector("#overlay").style.display = "none";
+    document.querySelector(`#overlay`).style.display = `none`;
   }
 
 
@@ -301,8 +320,8 @@ const isRoundEnded = () => {
         [gridButtonsArr[2], gridButtonsArr[4], gridButtonsArr[6]]
     ];
 
-    const winner = winningCombinations.some(value => value.every(v => v !== '' && v === value[0]));
-    const boardNotFull = gridButtonsArr.some(value => value === '');
+    const winner = winningCombinations.some(value => value.every(v => v !== `` && v === value[0]));
+    const boardNotFull = gridButtonsArr.some(value => value === ``);
 
     if(winner === true) {
         return true;
@@ -315,10 +334,10 @@ const isRoundEnded = () => {
 
 const gameOutcome = () => {
 
-    const player1Win = winningCombinations.some(value => value.every(v => (v === player1.default_symbol) || (typeof(player1.custom_symbol) !== 'undefined' && v.search(player1.custom_symbol) !== -1)));
-    const player2Win = winningCombinations.some(value => value.every(v => (v === player2.default_symbol) || (typeof(player1.custom_symbol) !== 'undefined' && v.search(player2.custom_symbol) !== -1)));
+    const player1Win = winningCombinations.some(value => value.every(v => (v === player1.default_symbol) || (typeof(player1.custom_symbol) !== `undefined` && v.search(player1.custom_symbol) !== -1)));
+    const player2Win = winningCombinations.some(value => value.every(v => (v === player2.default_symbol) || (typeof(player1.custom_symbol) !== `undefined` && v.search(player2.custom_symbol) !== -1)));
 
-    const boardNotFull = gridButtonsArr.some(value => value === '')
+    const boardNotFull = gridButtonsArr.some(value => value === ``)
 
     if (player1Win === true) {
         player1.addToScore(1);
@@ -327,21 +346,11 @@ const gameOutcome = () => {
         player2.addToScore(1);
         overlayOn(`${player2.name} wins`);
     } else if (boardNotFull === false) {
-        overlayOn('Draw');
+        overlayOn(`Draw`);
     }
 }
 
-// Changes player turn when invoked
 
-const changeTurn = (nextGo) => {
-    for (let i = 0; i < turns.length; i++) {
-        if(turns[i].dataset.name === 'current-go') {
-            turns[i].dataset.name = '';
-        } else if (turns[i].dataset.name === '' && nextGo === true) {
-            turns[i].dataset.name = 'current-go'
-        }
-    }
-}
 
 // This function adds an event listener to each tile.
 // It checks if the round has ended and if the tile has been clicked already
@@ -350,18 +359,18 @@ const changeTurn = (nextGo) => {
 // If true, it invokes the overlay if the result.
 // If the game hasn't ended, it changes turn.
 
-const gridEventListener = () => {
+const playerTakesTurn = () => {
     gridButtons.forEach((button, index) => {
-        button.addEventListener('click', function() {
-            if(button.innerHTML === '' && isRoundEnded() !== true) {
+        button.addEventListener(`click`, function() {
+            if(button.innerHTML === `` && isRoundEnded() !== true) {
                 button.innerHTML = document.querySelector(`[data-name*="current-go"]`).innerHTML;
                 gridButtonsArr[index] = button.innerHTML;
-                audio('resources/click_sound.mp3');
-                button.id = 'clicked';
+                audio(`resources/click_sound.mp3`);
+                button.id = `clicked`;
                 if(isRoundEnded() === true) {
                     gameOutcome();
                     changeTurn(false);
-                    audio('resources/end_game_sound.mp3');
+                    audio(`resources/end_game_sound.mp3`);
                 } else {
                     changeTurn(true);
                 }
@@ -372,9 +381,9 @@ const gridEventListener = () => {
 
 // This invokes the event listeners
 
-gridEventListener();
+playerTakesTurn();
 
-const restartRoundButtons = document.querySelectorAll('.restart-button');
+const restartRoundButtons = document.querySelectorAll(`.restart-button`);
 
 
 // This restarts the round if you press the Restart Round button
@@ -382,20 +391,20 @@ const restartRoundButtons = document.querySelectorAll('.restart-button');
 // Tracks turns accordingly
 
 const restartRound = (button) => {
-    button.addEventListener('click', function() {
+    button.addEventListener(`click`, function() {
         overlayOff();
         gridButtons.forEach((value, index) => {
-            value.innerHTML = '';
+            value.innerHTML = ``;
             value.id = index;
         });
-        gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
-        audio('resources/restart_game.mp3');
-        newRound();
-        if(button.textContent === "Next Round!") {
+        gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = ``);
+        audio(`resources/restart_game.mp3`);
+        checkIfNewRound();
+        if(button.textContent === `Next Round!`) {
             nextRound();
-            firstTurn();
+            determineFirstTurn();
         }
-        firstTurn();
+        determineFirstTurn();
     })
 }
 
@@ -405,18 +414,18 @@ restartRoundButtons.forEach(button => restartRound(button));
 
 const resetGame = (button) => {
     restartRound(button);
-    button.addEventListener('click', function() {
+    button.addEventListener(`click`, function() {
         player1.currentScore(0);
         player2.currentScore(0);
-        localStorage.removeItem('player 1 score');
-        localStorage.removeItem('player 2 score');
-        localStorage.removeItem('rounds');
-        countOfRounds();
-        firstTurn();
+        localStorage.removeItem(`player 1 score`);
+        localStorage.removeItem(`player 2 score`);
+        localStorage.removeItem(`rounds`);
+        determineCountOfRounds();
+        determineFirstTurn();
     })
 };
 
-const resetGameButtons = document.querySelectorAll('#reset-game');
+const resetGameButtons = document.querySelectorAll(`#reset-game`);
 resetGameButtons.forEach(button => resetGame(button));
 
 const resetPlayers = () => {
@@ -426,14 +435,14 @@ const resetPlayers = () => {
     player2.resetSymbol();
 }
 
-const resetPlayerButton = document.querySelector('#reset-players')
+const resetPlayerButton = document.querySelector(`#reset-players`)
 
 // Resets the players to their defaults
 
-resetPlayerButton.addEventListener('click', () => {
-    if(newRound() === true) {
+resetPlayerButton.addEventListener(`click`, () => {
+    if(checkIfNewRound() === true) {
         resetPlayers();
     } else {
-        alert('Please no changing players during the game');
+        alert(`Please no changing players during the game`);
     }
 })

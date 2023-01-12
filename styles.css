@@ -2,12 +2,12 @@
 
 @font-face {
     font-family: 'TicTacToeFont';
-    src:  url('Desktop-GoodDog/Fonts/gooddog.otf');
+    src:  url('resources/Desktop-GoodDog/Fonts/gooddog.otf');
   }
 
 @font-face {
     font-family: 'ChalkboardFont';
-    src: url('CallieChalkFont-Regular.otf');
+    src: url('resources/CallieChalkFont-Regular.otf');
 }
 
 
@@ -43,6 +43,8 @@ main {
 #game-area {
     margin: 0 auto;
 }
+
+
 /* Player profile boxes */
 
 .profile {
@@ -120,7 +122,7 @@ img[id^="player-img"] {
     display: grid;
     grid-template-columns: 0.5fr 300px 0.5fr;
     grid-template-rows: 1fr;
-    background-image: url('Chalkboard2.jpeg');
+    background-image: url('resources/Chalkboard2.jpeg');
     background-size: cover;
 }
 .grid-container {
@@ -213,6 +215,7 @@ button {
     animation: glowing 1000ms infinite;
 }
 
+
 /* End of round */
 
 #overlay {
@@ -245,10 +248,12 @@ button {
     padding: 50px;
   }
 
+
 /* Mobile reponsive sizing and other smaller screens */
 
 @media screen and (max-width: 745px) {
 
+    
     /* Parent Elements */
 
     main {
@@ -273,7 +278,7 @@ button {
         width: 324px;
         grid-template-columns: 0.5fr 189px 0.5fr;
         grid-template-rows: 1fr;
-        background-image: url('Chalkboard3.jpeg');
+        background-image: url('resources/Chalkboard3.jpeg');
         margin: 0 auto;
     }
 
@@ -293,11 +298,13 @@ button {
         margin-right: 21px;
     }
 
+
     /* Player profiles */
     
     .profile {
         margin: 10px auto;
     }
+
 
     /* Scoreboard */
 
@@ -305,6 +312,7 @@ button {
         margin: 10px auto;
         grid-row: 1;
     }
+
 
     /* Buttons */
 
@@ -314,12 +322,11 @@ button {
         font-size: 24px;
     }
 
+
     /* End of round */
 
     #text {
         font-size: 28px;
         border-radius: 12px;
-    }
-
-    
+    } 
 }

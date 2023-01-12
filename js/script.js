@@ -206,8 +206,8 @@ firstTurn();
 const volumeButton = document.querySelector('.sound-button');
 
 const volume = (value) => {
-    volumeButton.id = 'sound-button-' + value;
-    volumeButton.src = 'sound-' + value + '.png';
+    volumeButton.id = 'resources/sound-button-' + value;
+    volumeButton.src = 'resources/sound-' + value + '.png';
 }
 
 const volumeToggle = () => {
@@ -323,12 +323,12 @@ const gridEventListener = () => {
             if(button.innerHTML === '' && isGameEnded() !== true) {
                 button.innerHTML = document.querySelector(`[data-name*="current-go"]`).innerHTML;
                 gridButtonsArr[index] = button.innerHTML;
-                audio('click_sound.mp3');
+                audio('resources/click_sound.mp3');
                 button.id = 'clicked';
                 if(isGameEnded() === true) {
                     gameOutcome();
                     changeTurn(false);
-                    audio('end_game_sound.mp3');
+                    audio('resources/end_game_sound.mp3');
                 } else {
                     changeTurn(true);
                 }
@@ -351,7 +351,7 @@ const restartGame = (button) => {
             value.id = index;
         });
         gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
-        audio('restart_game.mp3');
+        audio('resources/restart_game.mp3');
         newGame();
         if(button.textContent === "Next Round!") {
             nextRound();

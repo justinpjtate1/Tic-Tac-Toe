@@ -1,60 +1,82 @@
+// This class helps to render repetitive elements on the page.
+
 class RepetitiveElements {
-    constructor(number) {
-        this.number = number;
+    constructor(numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
     }
-    createNewElement(elementType, className, idName, type, innerHTML, parentDiv, multiple, accept) {
+
+    loadPlayerElements(elementToClone, parentElement, display) {
+        for (let i = 1; i <= this.numberOfPlayers; i++) {
+            const newPlayerElement = document.querySelector(elementToClone);
+            const clone = newPlayerElement.cloneNode(true);
+            this.changeIdOfClonedElement(clone, i);
+            document.querySelector(parentElement).appendChild(clone);
+            this.changeIdOfClonedChildElements(clone, i);
+            
+
+        clone.style.display = display;
+        }
+        
+    }
+
+    changeIdOfClonedElement (clonedElement, newId) {
+        clonedElement.id = clonedElement.id.replace("0", `${newId}`);
+        clonedElement.innerHTML = clonedElement.innerHTML.replace("0", `${newId}`);
+    }
+
+    changeIdOfClonedChildElements (clonedElement, newId) {
+        const newPlayerChildElements = clonedElement.childNodes
+        newPlayerChildElements.forEach(element => {
+            if(element.id) {
+                this.changeIdOfClonedElement(element, newId);
+                element.childNodes.forEach(element => {
+                    if(element.id) {
+                        this.changeIdOfClonedElement(element, newId);
+                    }
+                });
+            }
+        })
+    }
+
+    createNewGridElement(elementType, className, idName, parentDiv) {
         const element = document.createElement(elementType);
         element.className = className;
         element.id = idName;
-        element.type = type;
-        element.innerHTML = innerHTML
         document.querySelector(parentDiv).appendChild(element);
-        element.multiple = multiple;
-        element.accept = accept;
-    }
-
-    loadPlayerSettings() {
-        this.createNewElement('h2', 'player-heading', `player${this.number}-heading`, '', `Player ${this.number}`, `#player${this.number}-profile`);
-        this.createNewElement('div', 'fields', `name-fields-${this.number}`, '', '', `#player${this.number}-profile`);
-        this.createNewElement('div', 'fields', `symbol-fields-${this.number}`, '', '', `#player${this.number}-profile`);
-        this.createNewElement('p', 'custom-symbol-paragraph', `player${this.number}-custom-symbol`, '', `or`, `#player${this.number}-profile`);
-        this.createNewElement('div', 'fields', `custom-symbol-fields-${this.number}`, '', '', `#player${this.number}-profile`);
-        this.createNewElement('p', 'name-paragraph', `player${this.number}-name`, '', `name`, `#name-fields-${this.number}`);
-        this.createNewElement('input', 'name-input', `name-input-${this.number}`, 'text', '', `#name-fields-${this.number}`);
-        this.createNewElement('button', 'submit', `submit-name-${this.number}`, '', 'Submit', `#name-fields-${this.number}`);
-        this.createNewElement('p', 'symbol-paragraph', `player${this.number}-symbol`, '', `Symbol`, `#symbol-fields-${this.number}`);
-        this.createNewElement('input', 'name-input', `symbol-input-${this.number}`, 'text', '', `#symbol-fields-${this.number}`);
-        this.createNewElement('button', 'submit', `submit-symbol-${this.number}`, '', 'Submit', `#symbol-fields-${this.number}`);
-        this.createNewElement('input', 'fileupload', `fileupload-${this.number}`, 'file', '', `#custom-symbol-fields-${this.number}`, false, 'image/*');
-        this.createNewElement('p', 'counter', `counter-${this.number}`, '', '', "#counters");
-        this.createNewElement('p', 'player-name', `player-name-${this.number}`, '', '', '#player-names');
-        this.createNewElement('div', 'scores', `score-player-${this.number}`, '', '', '#scores');
-        this.createNewElement('div', 'fields', `name-fields-${this.number}`, '', '', `#player${this.number}-profile`);
     }
 
     loadGrid() {
         for (let i = 1; i < 10; i++) {
-            this.createNewElement('div', 'grid-item', `${i}`, '', '', '.grid-container');
+            this.createNewGridElement('div', 'grid-item', `${i}`, '.grid-container');
         }
     }
 }
 
-const player1Elements = new RepetitiveElements(1);
-const player2Elements = new RepetitiveElements(2);
-const otherElements = new RepetitiveElements();
 
-player1Elements.loadPlayerSettings();
-player2Elements.loadPlayerSettings();
-otherElements.loadGrid();
+// Invoking the functions that allow us to render the repetitve elements.
+
+const repetitiveElements = new RepetitiveElements(2);
+repetitiveElements.loadPlayerElements('#player0-profile', '#game-information', 'block');
+repetitiveElements.loadPlayerElements('#counter-0', '#counters', 'inline-block');
+repetitiveElements.loadPlayerElements('#player-name-0', '#player-names', 'inline-block');
+repetitiveElements.loadPlayerElements('#score-player-0', '#scores', 'inline-block');
+repetitiveElements.loadGrid();
+
+// Creating an array of the contents of each grid item.
 
 const gridButtons = document.querySelectorAll('.grid-item');
 const gridButtonsArr = Array.prototype.slice.call(gridButtons).map(value => value.innerHTML);
 
-const newGame = () => {
+
+// A function that checks whether the round of Tic Tac Toe is new, or in progress.
+
+const  newRound = () => {
     if(gridButtonsArr.every(value => value === '') === true) {
         return true;
     }
 }
+
+// This class loads the player information for each player
 
 class Player {
     constructor(number, symbol) {
@@ -112,7 +134,7 @@ class Player {
 
     changeSymbol() {
         this.submit_symbol_button.addEventListener('click', () => {
-            if(newGame() === true) {
+            if(newRound() === true) {
                 if(this.input_symbol.value !== '') {
                     this.custom_symbol = this.input_symbol.value;
                     this.scoreboard_symbol.innerHTML = this.custom_symbol;
@@ -129,7 +151,7 @@ class Player {
 
     changeSymbolToUploaded() {
         this.upload_symbol.addEventListener('change', (event) => {
-            if(newGame() === true) {
+            if(newRound() === true) {
                 let img = document.createElement('img');
                 img.src = URL.createObjectURL(event.target.files[0]);
                 img.id = `player-img-${this.number}`
@@ -159,6 +181,9 @@ class Player {
     }
 }
 
+
+// Define the players in the game and invoke the information needed.
+
 const player1 = new Player(1, 'X');
 player1.addDetailsToScoreboard();
 
@@ -173,6 +198,7 @@ player1.changeSymbolToUploaded();
 player2.changeSymbolToUploaded();
 
 
+// Determines whether the game is just starting, or whether it's an existing game.
 let rounds;
 const countOfRounds = () => {
     if(localStorage.getItem(`rounds`) !== null) {
@@ -189,10 +215,13 @@ const nextRound = () => {
 
 countOfRounds();
 
+
+// Determines who's turn it is based on how many rounds there's been in the game.
+
 const turns = document.querySelectorAll('.counter');
 
 const firstTurn = () => {
-    if(newGame() === true && rounds % 2 !== 0) {
+    if(newRound() === true && rounds % 2 !== 0) {
         turns[0].dataset.name = '';
         turns[1].dataset.name = 'current-go';
     } else {
@@ -202,6 +231,9 @@ const firstTurn = () => {
 }
 
 firstTurn();
+
+
+// Determines whether the volume should be on
 
 const volumeButton = document.querySelector('.sound-button');
 
@@ -238,6 +270,9 @@ const audio = (filename) => {
     } 
 }
 
+
+// Defines the functionality of the overlay that pops up once the round has ended
+
 const overlayOn = (outcome) => {
     const overlay = document.querySelector("#overlay");
     overlay.style.display = "block";
@@ -249,7 +284,10 @@ const overlayOff = () => {
     document.querySelector("#overlay").style.display = "none";
   }
 
-const isGameEnded = () => {
+
+// Checks whether the round has ended based on if a player has one or draw
+
+const isRoundEnded = () => {
 
     winningCombinations = [
         [gridButtonsArr[0], gridButtonsArr[1], gridButtonsArr[2]],
@@ -273,16 +311,15 @@ const isGameEnded = () => {
     }
 }
 
+// Checks which player has won once the game has ended, or if it's a draw. Updates scores accordingly
+
 const gameOutcome = () => {
-    // The winner variable checks if one of the winning combinations has been hit by either the X or O
 
     const player1Win = winningCombinations.some(value => value.every(v => (v === player1.default_symbol) || (typeof(player1.custom_symbol) !== 'undefined' && v.search(player1.custom_symbol) !== -1)));
     const player2Win = winningCombinations.some(value => value.every(v => (v === player2.default_symbol) || (typeof(player1.custom_symbol) !== 'undefined' && v.search(player2.custom_symbol) !== -1)));
 
-    // The boardNotFull variable checks if there is still space on the board
     const boardNotFull = gridButtonsArr.some(value => value === '')
 
-    // This if statement prints an outcome to the page when there is one. Use this.number maybe to cut down the if?
     if (player1Win === true) {
         player1.addToScore(1);
         overlayOn(`${player1.name} wins`);
@@ -294,17 +331,7 @@ const gameOutcome = () => {
     }
 }
 
-// This function displays the change in turn on the page;
-// const turnsArr = Array.prototype.slice.call(turns);
-// const changeTurn = (nextGo) => {
-//     turnsArr.forEach(turn => {
-//         if(turn.dataset.name === 'current-go') {
-//             turn.dataset.name = ""
-//         } else if ((turn.datset.name === "") && (nextGo === true)) {
-//             turn.dataset.name = 'current-go'
-//         }
-//     })
-// }
+// Changes player turn when invoked
 
 const changeTurn = (nextGo) => {
     for (let i = 0; i < turns.length; i++) {
@@ -316,16 +343,22 @@ const changeTurn = (nextGo) => {
     }
 }
 
-// This function adds an event listener to each tile
+// This function adds an event listener to each tile.
+// It checks if the round has ended and if the tile has been clicked already
+// If the round hasn't ended and the tile is vacant, it adds the symbol of the player who's turn it is
+// It then checks if the game has ended. 
+// If true, it invokes the overlay if the result.
+// If the game hasn't ended, it changes turn.
+
 const gridEventListener = () => {
     gridButtons.forEach((button, index) => {
         button.addEventListener('click', function() {
-            if(button.innerHTML === '' && isGameEnded() !== true) {
+            if(button.innerHTML === '' && isRoundEnded() !== true) {
                 button.innerHTML = document.querySelector(`[data-name*="current-go"]`).innerHTML;
                 gridButtonsArr[index] = button.innerHTML;
                 audio('resources/click_sound.mp3');
                 button.id = 'clicked';
-                if(isGameEnded() === true) {
+                if(isRoundEnded() === true) {
                     gameOutcome();
                     changeTurn(false);
                     audio('resources/end_game_sound.mp3');
@@ -338,12 +371,17 @@ const gridEventListener = () => {
 }
 
 // This invokes the event listeners
+
 gridEventListener();
 
-// This restarts the game if you press the Restart Game button
-const restartGameButtons = document.querySelectorAll('.restart-button');
+const restartRoundButtons = document.querySelectorAll('.restart-button');
 
-const restartGame = (button) => {
+
+// This restarts the round if you press the Restart Round button
+// It also starts the next round if the Next Round button is pressed
+// Tracks turns accordingly
+
+const restartRound = (button) => {
     button.addEventListener('click', function() {
         overlayOff();
         gridButtons.forEach((value, index) => {
@@ -352,7 +390,7 @@ const restartGame = (button) => {
         });
         gridButtonsArr.forEach((value, index) => gridButtonsArr[index] = '');
         audio('resources/restart_game.mp3');
-        newGame();
+        newRound();
         if(button.textContent === "Next Round!") {
             nextRound();
             firstTurn();
@@ -361,10 +399,12 @@ const restartGame = (button) => {
     })
 }
 
-restartGameButtons.forEach(button => restartGame(button));
+restartRoundButtons.forEach(button => restartRound(button));
+
+// Resets the whole game when the Reset Game buttons are clicked
 
 const resetGame = (button) => {
-    restartGame(button);
+    restartRound(button);
     button.addEventListener('click', function() {
         player1.currentScore(0);
         player2.currentScore(0);
@@ -388,8 +428,10 @@ const resetPlayers = () => {
 
 const resetPlayerButton = document.querySelector('#reset-players')
 
+// Resets the players to their defaults
+
 resetPlayerButton.addEventListener('click', () => {
-    if(newGame() === true) {
+    if(newRound() === true) {
         resetPlayers();
     } else {
         alert('Please no changing players during the game');

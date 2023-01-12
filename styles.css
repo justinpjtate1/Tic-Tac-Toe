@@ -44,6 +44,16 @@ main {
     margin: 0 auto;
 }
 
+#player1-profile {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#player2-profile {
+    grid-column: 3;
+    grid-row: 1;
+}
+
 
 /* Player profile boxes */
 
@@ -76,7 +86,11 @@ img[id^="player-img"] {
     background-color: black;
     color: white;
     border-radius: 12px;
+    grid-column: 2;
+    grid-row: 1;
 }
+
+
 
 .counter, .scores, .player-name {
     display: inline-block;
@@ -261,13 +275,8 @@ button {
     }
 
     #game-information {
-        display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: 0.33fr 0.33fr 0.33fr;
-    }
-
-    #game-information>section {
-        margin-top: 10px;
+        grid-template-rows: 0.33fr 0.34fr 0.33fr;
     }
 
 
@@ -300,18 +309,37 @@ button {
 
 
     /* Player profiles */
-    
-    .profile {
-        margin: 10px auto;
+
+    #game-information>section {
+        margin-top: 10px;
     }
 
+    #player1-profile {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    #player2-profile {
+        grid-column: 1;
+        grid-row: 3;
+    }
 
     /* Scoreboard */
-
+    
     #scoreboard {
         margin: 10px auto;
         grid-row: 1;
+        grid-column: 1;
     }
+
+    #player1 {
+        grid-row: 2;
+    }
+
+    #player2 {
+        grid-row: 3;
+    }
+
 
 
     /* Buttons */

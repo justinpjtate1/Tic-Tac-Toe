@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Classic Tic Tac Toe</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,18 +20,20 @@
     </div>
     <main>
         <section id="game-information">
-            <section class= "profile" id="player1-profile">
-            </section>
             <div id="scoreboard">
                 <section id="counters">
+                    <!-- <p class="counter" id="counter-1"></p>
+                    <p class="counter" id="counter-2"></p> -->
                 </section>
                 <section id="player-names">
+                    <!-- <p class="player-name" id="player-name-1"></p>
+                    <p class="player-name" id="player-name-2"></p> -->
                 </section>
                 <section id="scores">
+                    <!-- <div class="scores" id="score-player-1"></div>
+                    <div class="scores" id="score-player-2"></div> -->
                 </section>
             </div>
-            <section class= "profile" id="player2-profile">
-            </section>
         </section>
         <section id="game-area">
             <section id="board">
@@ -46,6 +48,26 @@
             </section>
         </section>
     </main>
+    <section class="profile" id="player0-profile" style="display: none">
+        <h2 class="player-heading" id="player0-heading">Player 0</h2>
+        <div class="fields" id="name-fields-0">
+            <p class="name-paragraph" id="player0-name">name</p>
+            <input class="name-input" id="name-input-0" type="text">
+            <button class="submit" id="submit-name-0">Submit</button>
+        </div>
+        <div class="fields" id="symbol-fields-0">
+            <p class="symbol-paragraph" id="player1-symbol">Symbol</p>
+            <input class="name-input" id="symbol-input-0" type="text">
+            <button class="submit" id="submit-symbol-0" type="">Submit</button>
+        </div>
+        <p class="custom-symbol-paragraph" id="player0-custom-symbol">or</p>
+        <div class="fields" id="custom-symbol-fields-0">
+            <input class="fileupload" id="fileupload-0" type="file" accept="image/*"></div>
+    </section>
+    <p class="counter" id="counter-0" style="display:none"></p>
+    <p class="player-name" id="player-name-0" style="display:none"></p>
+    <div class="scores" id="score-player-0" style="display:none"></div>
+
     <footer>
         By Justin Tate
     </footer>

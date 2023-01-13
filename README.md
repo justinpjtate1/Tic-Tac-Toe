@@ -71,7 +71,7 @@ https://justinpjtate1.github.io/Tic-Tac-Toe/
 
 ## Planning
 
-My first goal was to create a plan that included all of the MVP features. Firstly I thought about how the web page application would look and I drafted the wireframes below:
+My first goal was to create a plan that included all of the MVP features. Firstly I thought about how the web page application would look and drafted some simple wireframes.
 
 I knew I would need individual sections for the scoreboard, the playing board and the reset buttons. I also knew I would need a div for the overlay that didn't show initially.
 

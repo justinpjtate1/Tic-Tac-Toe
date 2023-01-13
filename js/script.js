@@ -164,7 +164,7 @@ class Player {
     changeSymbolToUploaded() {
         this.upload_symbol.addEventListener(`change`, (event) => {
             if(checkIfNewRound() === true) {
-                this.upload_symbol();
+                this.uploadedSymbol(event);
             } else {
                 alert(`Please no changes to the symbol during the game`);
             }

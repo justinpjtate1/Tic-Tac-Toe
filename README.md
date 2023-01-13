@@ -73,6 +73,9 @@ https://justinpjtate1.github.io/Tic-Tac-Toe/
 
 My first goal was to create a plan that included all of the MVP features. Firstly I thought about how the web page application would look and drafted some simple wireframes.
 
+<img width="350" alt="Wireframe 1" src="https://user-images.githubusercontent.com/119341279/212289697-0348b252-011b-4cc2-84be-77dfdc9b43f7.png">
+<img width="350" alt="Wireframe 2" src="https://user-images.githubusercontent.com/119341279/212289704-b3d8a35e-2626-4fa7-9e16-29b8fe7afd97.png">
+
 I knew I would need individual sections for the scoreboard, the playing board and the reset buttons. I also knew I would need a div for the overlay that didn't show initially.
 
 To avoid repeating code for the 2 players, I defined the HTML for a player and used JS logic to clone the nodes for the second player. 

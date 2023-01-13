@@ -85,3 +85,5 @@ The biggest piece of planning was to work out how to best to define the winning 
 Decided to use class IDs on page to show who's turn it is and this would alternate on the click event.
 
 Restart button had to clear the current board array.
+
+I also did some research into how to create an overlay with the end result.

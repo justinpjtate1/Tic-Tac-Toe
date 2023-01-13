@@ -77,7 +77,11 @@ I knew I would need individual sections for the scoreboard, the playing board an
 
 To avoid repeating code for the 2 players, I defined the HTML for a player and used JS logic to clone the nodes for the second player. 
 
+The biggest piece of planning was to work out how to best to define the winning conditions and look them up against the current state of the board. I decided as the winning conditions weren't going to change, I could add these manually in a 2D array. I also had to think about some functionality that checked the board against this 2D array to see if any conditions held true. I decided this should be done on the click event for each tile, so I also knew that the current board would need it's own array and updated on every click.
 
+Decided to use class IDs on page to show who's turn it is and this would alternate on the click event.
+
+Restart button had to clear the current board array
 
 ## HTML
 

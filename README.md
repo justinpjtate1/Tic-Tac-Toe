@@ -81,39 +81,4 @@ The biggest piece of planning was to work out how to best to define the winning 
 
 Decided to use class IDs on page to show who's turn it is and this would alternate on the click event.
 
-Restart button had to clear the current board array
-
-## HTML
-
-- Header section with `<h1>` header tag
-- Section for the X and O
-- Separate tags for X and O. Possibly `<p>`?
-- Use an ID on the X and O tags to suggest which go
-- main section for the grid.
-- 9 elements for the grid
-- Section for the button to restart game
-- footer section saying by me
-
-## CSS
-
-- Make the body stretch to the whole page
-- Flexbox the body and have the stretchable element as the main section
-- make the grid using grid-template for rows and columns
-- Keep the grid in the center of the page
-- Center the X and O tags
-- style the id that suggests which turn it is with an underline for clarity
-
-## JS
-
-- Get all of the grid items into an array
-- use the forEach method to add event listeners
-- in the click event listener, create an if with the innerHTML
-- if innerHTML = "" then replace innerHTML with the inner text of the ID currentGo (another array?)
-- Also change the ID to the other element
-
-- We also need to determine when to create an alert when the game is over. Possibly this is a do..while?
-- Create a variable with all winning conditons and make this the stopping point - maybe an array?
-- Once the do-while condition is satisfied a pop-up should appear
-- The pop-up should have a button that allows you to restart game
-- When button is pressed, the pop-up should disappear
-- Similar functionality with a click event listener for the restart game button
+Restart button had to clear the current board array.

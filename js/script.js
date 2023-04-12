@@ -383,12 +383,12 @@ const playerTakesTurn = () => {
 
 playerTakesTurn();
 
-const restartRoundButtons = document.querySelectorAll(`.restart-button`);
-
 
 // This restarts the round if you press the Restart Round button
 // It also starts the next round if the Next Round button is pressed
 // Tracks turns accordingly
+
+const restartRoundButtons = document.querySelectorAll(`.restart-button`);
 
 const restartRound = (button) => {
     button.addEventListener(`click`, function() {
